@@ -1,5 +1,6 @@
 # SOEN342Project
-
+To view all technical artifacts:
+```cd /SOEN342Project/TechnicalArtifcats```
 ## Team members
 | Members           | ID   | Email             | Section |
 |----------------|------|-------------------|---------|
