@@ -6,9 +6,7 @@ public class Schedule {
     private static List<Offering> schedule = new ArrayList<>();
 
     public void addOffering(Offering offering) {
-        if (offering.isVisible()){
         this.schedule.add(offering);
-    }
     }
 
     public List<Offering> getOfferings() {

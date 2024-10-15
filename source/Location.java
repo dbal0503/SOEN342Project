@@ -4,16 +4,24 @@ import java.util.List;
 public class Location {
     private String address;
     private String city;
+    private String room;
     private String organization;
     private List<String> offerings;
 
-    public Location(String address, String city, String organization, List<String> offerings) {
+    public Location(String address, String city, String organization, String room) {
         this.address = address;
         this.city = city;
         this.organization = organization;
-        this.offerings = offerings;
+        //this.offerings = offerings;
+        this.room = room;
+    }
+    public String getRoom() {
+        return room;
     }
 
+    public void setRoom(String room) {
+        this.room = room;
+    }
     public String getAddress() {
         return address;
     }

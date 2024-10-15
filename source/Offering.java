@@ -1,27 +1,33 @@
 public class Offering {
     private Location location;
-    private String time;
+    private String startTime;
+    private String endTime;
     private boolean available;
     private boolean isGroup;
-    private boolean visible;
+    private boolean visible=false;
     private int capacity;
     private int enrolled=0;
     private Instructor instructor;
+    private String date;
+    private String offeringName;
 
+    public int getEnrolled() {
+        return enrolled;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
     // Default constructor
     public Offering() {
     }
 
-    // Parameterized constructor
-    public Offering(Location location, String time, boolean available, boolean isGroup, boolean visible, int capacity, int enrolled, Instructor instructor) {
-        this.location = location;
-        this.time = time;
-        this.available = available;
-        this.isGroup = isGroup;
-        this.visible = visible;
-        this.capacity = capacity;
-        this.enrolled = enrolled;
-        this.instructor = instructor;
+    public Location getLocation() {
+        return location;
     }
 
     public Instructor getInstructor() {
@@ -33,23 +39,21 @@ public class Offering {
     }
     
     // Parameterized constructor
-    public Offering(Location location, String time, boolean available, boolean isGroup, boolean visible, int capacity, int enrolled) {
+    public Offering(Location location, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
         this.location = location;
-        this.time = time;
-        this.available = available;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.isGroup = isGroup;
-        this.visible = visible;
         this.capacity = capacity;
-        this.enrolled = enrolled;
     }
 
 
-    public String getTime() {
-        return time;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setStartTime(String time) {
+        this.startTime = time;
     }
 
     public boolean isAvailable() {
@@ -75,4 +79,66 @@ public class Offering {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+    
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setEnrolled(int enrolled) {
+        this.enrolled = enrolled;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getOfferingName() {
+        return offeringName;
+    }
+
+    public void setOfferingName(String offeringName) {
+        this.offeringName = offeringName;
+    }
+
+    public void enroll() {
+        enrolled++;
+    }
+
+    public void unenroll() {
+        enrolled--;
+    }
+
+    public void cancel() {
+        available = false;
+    }
+
+
+@Override
+public String toString() {
+    return "Offering{" +
+            "location=" + location +
+            ", startTime='" + startTime + '\'' +
+            ", endTime='" + endTime + '\'' +
+            ", available=" + available +
+            ", isGroup=" + isGroup +
+            ", visible=" + visible +
+            ", capacity=" + capacity +
+            ", enrolled=" + enrolled +
+            ", instructor=" + instructor +
+            ", date='" + date + '\'' +
+            ", offeringName='" + offeringName + '\'' +
+            '}';
+}
 }

@@ -9,10 +9,10 @@ public class Admin {
         this.id = id;
     }
 
- /*void createOffering() {
-            Offering newOffering = new Offering();
+ void createOffering(Location location, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
+            Offering newOffering = new Offering(location, startTime, endTime, isGroup, capacity, date, offeringName);
             OfferingCatalog.addOffering(newOffering);
-        }*/
+        }
     public String getName() {
         return this.name;
     }
