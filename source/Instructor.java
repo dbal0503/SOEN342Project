@@ -1,7 +1,25 @@
-public class Instructor extends Users{
-    public String phonenumber;
-    public Specialization specialization;
-    public Availabilities availabilities;
-    public Offering[] offerings;
-    public Register register;
+public class Instructor {
+    private String name;
+    private int id;
+
+    public Instructor(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
