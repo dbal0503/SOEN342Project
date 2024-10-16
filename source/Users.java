@@ -1,5 +1,5 @@
 public abstract class Users {
-    public abstract String name;
-    public abstract int age;
-    public abstract int uniqueId;
+    public String name;
+    public int age;
+    public int uniqueId;
 }

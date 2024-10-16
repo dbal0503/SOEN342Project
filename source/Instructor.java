@@ -1,10 +1,8 @@
-public class Instructor {
-    private String name;
-    private int id;
-
+public class Instructor extends Users {
+    
     public Instructor(String name, int id) {
         this.name = name;
-        this.id = id;
+        this.uniqueId = id;
     }
 
     public String getName() {
@@ -16,10 +14,10 @@ public class Instructor {
     }
 
     public int getId() {
-        return this.id;
+        return this.uniqueId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.uniqueId = id;
     }
 }

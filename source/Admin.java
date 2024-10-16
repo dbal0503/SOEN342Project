@@ -1,12 +1,11 @@
 
-public class Admin {
-    private String name;
-    private int id;
+public class Admin extends Users {
+
     
 
     public Admin(String name, int id) {
         this.name = name;
-        this.id = id;
+        this.uniqueId = id;
     }
 
  void createOffering(Location location, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
@@ -22,10 +21,10 @@ public void setName(String name) {
 }
 
 public int getId() {
-    return this.id;
+    return this.uniqueId;
 }
 
 public void setId(int id) {
-    this.id = id;
+    this.uniqueId = id;
 }
 }
