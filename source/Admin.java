@@ -9,7 +9,6 @@ public class Admin extends Users {
     public Admin(String name, int id) {
         this.name = name;
         this.uniqueId = id;
-        this.phone_number = 0;
 
         if (Admin.admins == null) {
             admins = new ArrayList<Admin>();
@@ -46,6 +45,26 @@ public int getId() {
 public void setId(int id) {
     this.uniqueId = id;
 }
-
+public static boolean findAdmin(int id) {
+        for (Admin admin : admins) {
+            if (admin.uniqueId == id) {
+                System.out.println("Admin found");
+                return true;
+            }
+        }
+        System.out.println("Admin not found");
+        return false;
+    }
+    public static void adminLogin(Scanner scanner){
+        scanner.nextLine();
+        System.out.println(" Please enter your id: ");
+        int id = scanner.nextInt();
+        if (findAdmin(id)) {
+            System.out.println("Logged in successfully");
+        }
+        else {
+            System.out.println("Login failed");
+        }
+    }
 
 }

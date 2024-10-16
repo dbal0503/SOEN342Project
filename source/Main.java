@@ -18,6 +18,7 @@ public class Main {
         switch(choice) {
             case 1:
                 System.out.println("Admin Login");
+                Admin.adminLogin(scanner);
                 break;
             case 2:
                 Instructor.instructorLogin(scanner);
@@ -36,11 +37,11 @@ public class Main {
     
     public static void main(String[] args) {
         System.out.println("------------------------------------------------------------------");
+        Admin admin = new Admin("John", 1);
+        Admin admin1 = new Admin("Susan", 2);
 
         menu();
     
-        Admin admin = new Admin("John", 1);
-        Admin admin1 = new Admin("Susan", 1);
         Admin.displayAdmins();
         Location location = new Location("4549 Main St", "CityBob", "Community Center", "Room 92");
         admin.createOffering(location, "9:00", "10:00", true, 20, "2021-10-01", "Yoga");
