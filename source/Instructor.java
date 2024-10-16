@@ -17,6 +17,7 @@ public class Instructor extends Users {
         int int_phone_number= 0;
         boolean condition = true;
         int id =0;
+        int_phone_number= parsephoneNumber(phone_number);
         Availabilities availabilities_Instructor = parseAvailabilities(availabilities);
         Specialization specialization_Specialization = new Specialization(specialization);
         if (Instructor.instructors == null){
@@ -29,8 +30,7 @@ public class Instructor extends Users {
         for (Instructor instructor : instructors) {
             Instructor newInstructor = new Instructor(name, id, int_phone_number, specialization_Specialization, availabilities_Instructor);
             instructors.add(newInstructor);
-            
-             int_phone_number= parsephoneNumber(phone_number);
+
             if (instructor.phone_number == int_phone_number) {
                 System.out.println("An Instructor with this phone number already exists");
                 return false;
@@ -56,14 +56,10 @@ public class Instructor extends Users {
     public String getName() {
         return this.name;
     }
-    /*public static int parsephoneNumber(String phone_number) {
-        String[] phone_numberArray = phone_number.split("-");
-        String phoneNumber = "";
-        for (String number : phone_numberArray) {
-            phoneNumber += number;
-        }
-        return Integer.parseInt(phoneNumber);
-    }*/
+
+    public static List<Instructor> getInstructors() {
+        return instructors;
+    }
     public static Availabilities parseAvailabilities(String availabilities){
         String[] availabilitiesArray = availabilities.split(",");
         City[] cities = new City[availabilitiesArray.length];
@@ -122,6 +118,31 @@ public class Instructor extends Users {
         }
         else {
             System.out.println("Instructor registration failed");
+        }
+    }
+
+    public static boolean findInstructor(String phone_number) {
+        System.out.println(phone_number);
+        for (Instructor instructor : instructors) {
+            System.out.println("instructor db"+instructor.phone_number);
+            if (instructor.phone_number == parsephoneNumber(phone_number)) {
+                System.out.println("Instructor found");
+                return true;
+            }
+        }
+        System.out.println("Instructor not found");
+        return false;
+    }
+    public static void instructorLogin(Scanner scanner){
+        scanner.nextLine();
+        System.out.println("instructor Login");
+        System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
+        String phone_number = scanner.nextLine();
+        if (findInstructor(phone_number)) {
+            System.out.println("Logged in successfully");
+        }
+        else {
+            System.out.println("Login failed");
         }
     }
 
