@@ -29,7 +29,7 @@ public class Instructor extends Users {
     public int getPhoneNumber() {
         return this.phone_number;
     }
-    public int setPhoneNumber(int phone_number) {
+    public void setPhoneNumber(int phone_number) {
         this.phone_number = phone_number;
     }
     public Specialization getSpecialization() {
