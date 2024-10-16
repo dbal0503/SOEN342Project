@@ -1,4 +1,6 @@
 public class Availabilities{
-    public String time;
     public City[] cities;
+    public Availabilities(City[] cities) {
+        this.cities = cities;
+    }
 }
