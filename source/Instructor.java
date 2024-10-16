@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 public class Instructor extends Users {
-    public int phone_number;
     public Specialization specialization;
     public Availabilities availabilities;
     private static List<Instructor> instructors;
@@ -57,14 +56,14 @@ public class Instructor extends Users {
     public String getName() {
         return this.name;
     }
-    public static int parsephoneNumber(String phone_number) {
+    /*public static int parsephoneNumber(String phone_number) {
         String[] phone_numberArray = phone_number.split("-");
         String phoneNumber = "";
         for (String number : phone_numberArray) {
             phoneNumber += number;
         }
         return Integer.parseInt(phoneNumber);
-    }
+    }*/
     public static Availabilities parseAvailabilities(String availabilities){
         String[] availabilitiesArray = availabilities.split(",");
         City[] cities = new City[availabilitiesArray.length];
@@ -124,8 +123,6 @@ public class Instructor extends Users {
         else {
             System.out.println("Instructor registration failed");
         }
-
-
     }
 
 }

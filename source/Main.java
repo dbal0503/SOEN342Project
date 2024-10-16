@@ -14,7 +14,7 @@ public class Main {
                 System.out.println("Admin Login");
                 break;
             case 2:
-                System.out.println("Instructor Login");
+                //Instructor.instructorLogin(scanner);
                 break;
             case 3:
                 Instructor.instructorRegistration(scanner);
