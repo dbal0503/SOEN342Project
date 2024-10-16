@@ -15,9 +15,9 @@ public class Instructor extends Users {
     }
     public static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
         int int_phone_number= 0;
+        int_phone_number= parsephoneNumber(phone_number);
         boolean condition = true;
         int id =0;
-        int_phone_number= parsephoneNumber(phone_number);
         Availabilities availabilities_Instructor = parseAvailabilities(availabilities);
         Specialization specialization_Specialization = new Specialization(specialization);
         if (Instructor.instructors == null){
@@ -122,9 +122,7 @@ public class Instructor extends Users {
     }
 
     public static boolean findInstructor(String phone_number) {
-        System.out.println(phone_number);
         for (Instructor instructor : instructors) {
-            System.out.println("instructor db"+instructor.phone_number);
             if (instructor.phone_number == parsephoneNumber(phone_number)) {
                 System.out.println("Instructor found");
                 return true;
