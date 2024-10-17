@@ -16,21 +16,19 @@ public class Main {
         choice = scanner.nextInt();
         
         switch(choice) {
-            case 1:
+            case 1 -> {
                 System.out.println("Admin Login");
-                Admin.adminLogin(scanner);
-                break;
-            case 2:
-                Instructor.instructorLogin(scanner);
-                break;
-            case 3:
-                Instructor.instructorRegistration(scanner);
-                break;
-            case 0:
-                System.out.println("Exiting");
-                break;
-            default:
-                System.out.println("Invalid choice");
+                Admin.adminLogin();
+                }
+            case 2 ->{ if(Instructor.instructorLogin()){
+                Instructor.instructorMenu();}
+
+            
+            
+            }
+            case 3 -> Instructor.instructorRegistration();
+            case 0 -> System.out.println("Exiting");
+            default -> System.out.println("Invalid choice");
         }
         } while(choice !=0);
     }

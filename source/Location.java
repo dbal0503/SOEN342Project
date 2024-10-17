@@ -3,14 +3,14 @@ import java.util.List;
 
 public class Location {
     private String address;
-    private String city;
+    private City city;
     private String room;
     private String organization;
     private List<String> offerings;
 
     public Location(String address, String city, String organization, String room) {
         this.address = address;
-        this.city = city;
+        this.city = new City(city);
         this.organization = organization;
         //this.offerings = offerings;
         this.room = room;
@@ -30,11 +30,11 @@ public class Location {
         this.address = address;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 

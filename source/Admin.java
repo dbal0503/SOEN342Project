@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class Admin extends Users {
     private static List<Admin> admins;
+    private static final Scanner scanner = new Scanner(System.in);
+
     
 
     public Admin(String name, int id) {
@@ -55,7 +57,7 @@ public static boolean findAdmin(int id) {
         System.out.println("Admin not found");
         return false;
     }
-    public static void adminLogin(Scanner scanner){
+    public static void adminLogin(){
         scanner.nextLine();
         System.out.println(" Please enter your id: ");
         int id = scanner.nextInt();

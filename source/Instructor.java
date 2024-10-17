@@ -5,6 +5,7 @@ public class Instructor extends Users {
     public Specialization specialization;
     public Availabilities availabilities;
     private static List<Instructor> instructors;
+    private static final Scanner scanner = new Scanner(System.in);
     
     private Instructor(String name, int id, int phone_number, Specialization specialization, Availabilities availabilities) {
         this.name = name;
@@ -14,14 +15,14 @@ public class Instructor extends Users {
         this.availabilities = availabilities;
     }
     public static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
-        int int_phone_number= 0;
+        int int_phone_number;
         int_phone_number= parsephoneNumber(phone_number);
         boolean condition = true;
         int id =0;
         Availabilities availabilities_Instructor = parseAvailabilities(availabilities);
         Specialization specialization_Specialization = new Specialization(specialization);
         if (Instructor.instructors == null){
-            instructors = new ArrayList<Instructor>();
+            instructors = new ArrayList<>();
             Instructor newInstructor = new Instructor(name, id, int_phone_number, specialization_Specialization, availabilities_Instructor);
             instructors.add(newInstructor);
             return true;
@@ -102,7 +103,7 @@ public class Instructor extends Users {
     public void setAvailabilities(Availabilities availabilities) {
         this.availabilities = availabilities;
     }
-    public static void instructorRegistration(Scanner scanner) {
+    public static void instructorRegistration() {
         scanner.nextLine();
         System.out.println("Instructor Registration");
         System.out.println("Enter your name: ");
@@ -121,27 +122,62 @@ public class Instructor extends Users {
         }
     }
 
-    public static boolean findInstructor(String phone_number) {
+    public static Instructor findInstructor(String phone_number) {
         for (Instructor instructor : instructors) {
             if (instructor.phone_number == parsephoneNumber(phone_number)) {
                 System.out.println("Instructor found");
-                return true;
+                return instructor;
             }
         }
         System.out.println("Instructor not found");
-        return false;
+        return null;
     }
-    public static void instructorLogin(Scanner scanner){
-        scanner.nextLine();
+    public static boolean instructorLogin() {
         System.out.println("instructor Login");
         System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
         String phone_number = scanner.nextLine();
-        if (findInstructor(phone_number)) {
-            System.out.println("Logged in successfully");
+        Instructor instructor = findInstructor(phone_number);
+        if (instructor != null) {
+            System.out.println("Logged in successfully"); 
+            Session.getInstance(instructor);
+            return true;
         }
         else {
             System.out.println("Login failed");
+            return false;
         }
+    }
+    public static List<Offering> getOfferings(Instructor instructor) {
+        List<Offering> offerings = new ArrayList<>();
+        for (Offering offering : OfferingCatalog.getOfferings()) {
+            for (City city : instructor.availabilities.cities) {
+                if ((offering.getLocation().getCity().getName()).equals(city.getName())) {
+                    offerings.add(offering);
+                }
+            }
+        }
+        return offerings;
+    }
+    public static void instructorMenu() {
+        int choice;
+        do {
+            System.out.println("Choose one of the following options");
+            System.out.println("0. Exit");
+            System.out.println("1. View your offerings");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1 -> {System.out.println("Viewing your offerings");
+                List<Offering> offerings = getOfferings((Instructor)Session.user);
+                for (Offering offering : offerings) {
+                    System.out.println(offering);
+                
+                }
+                }
+                
+                case 0 -> System.out.println("Exiting");
+                default -> System.out.println("Invalid choice");
+            }
+        } while (choice != 0);
     }
 
 }

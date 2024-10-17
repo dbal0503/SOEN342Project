@@ -8,7 +8,7 @@ public class OfferingCatalog {
         offeringCatalog.add(offering);
     }
 
-    public List<Offering> getOfferings() {
+    public static List<Offering> getOfferings() {
         return offeringCatalog;
     }
 
