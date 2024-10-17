@@ -36,6 +36,9 @@ public class Offering {
 
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
+        setVisible(true);
+        OfferingCatalog.removeOffering(this);
+        Schedule.addOffering(this);
     }
     
     // Parameterized constructor
@@ -76,7 +79,7 @@ public class Offering {
         return visible;
     }
 
-    public void setVisible(boolean visible) {
+    private void setVisible(boolean visible) {
         this.visible = visible;
     }
     

@@ -164,17 +164,26 @@ public class Instructor extends Users {
             System.out.println("Choose one of the following options");
             System.out.println("0. Exit");
             System.out.println("1. View your offerings");
+            System.out.println("2. Accept an offering");
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> {System.out.println("Viewing your offerings");
                 List<Offering> offerings = getOfferings((Instructor)Session.user);
                 for (Offering offering : offerings) {
+                    System.out.print("ID: " + offerings.indexOf(offering) + " ");
                     System.out.println(offering);
                 
                 }
                 }
+                case 2 -> {
+                    System.out.println("Enter the id of the offering you would like to accept: ");
+                    int id = scanner.nextInt();
+                    Offering offering = OfferingCatalog.getOfferings().get(id);
+                    offering.setInstructor((Instructor)Session.user);
+
+                }
                 
-                case 0 -> System.out.println("Exiting");
+                case 0 -> System.out.println("Logout");
                 default -> System.out.println("Invalid choice");
             }
         } while (choice != 0);
