@@ -12,6 +12,8 @@ public class Main {
         System.out.println("1. Admin Login");
         System.out.println("2. Instructor Login");
         System.out.println("3. Instructor Registration");
+        System.out.println("4. View Offerings Schedule");
+        System.out.println("5. Make a booking");
 
         choice = scanner.nextInt();
         
@@ -23,10 +25,13 @@ public class Main {
             case 2 ->{ if(Instructor.instructorLogin()){
                 Instructor.instructorMenu();}
 
-            
-            
             }
             case 3 -> Instructor.instructorRegistration();
+            case 4 -> Schedule.viewPublicOfferings();
+            case 5 -> {System.out.println("Booking Interface");
+        
+        
+        }
             case 0 -> System.out.println("Exiting");
             default -> System.out.println("Invalid choice");
         }

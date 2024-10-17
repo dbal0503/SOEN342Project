@@ -14,7 +14,7 @@ public class Instructor extends Users {
         this.specialization = specialization;
         this.availabilities = availabilities;
     }
-    public static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
+    private static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
         int int_phone_number;
         int_phone_number= parsephoneNumber(phone_number);
         boolean condition = true;

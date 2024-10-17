@@ -14,4 +14,10 @@ public class Schedule {
     public List<Offering> getOfferings() {
         return schedule;
     }
+    public static void viewPublicOfferings(){
+        for(Offering offering : schedule){
+            System.out.print("ID: " + schedule.indexOf(offering) + " ");
+            System.out.println(offering);
+    }
+}
 }
