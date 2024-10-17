@@ -1,3 +1,7 @@
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Offering {
     private Location location;
     private String startTime;
@@ -126,7 +130,17 @@ public class Offering {
     public void cancel() {
         available = false;
     }
-
+    public static List<Offering> getOfferings(Instructor instructor) {
+        List<Offering> offerings = new ArrayList<>();
+        for (Offering offering : OfferingCatalog.getOfferings()) {
+            for (City city : instructor.availabilities.cities) {
+                if ((offering.getLocation().getCity().getName()).equals(city.getName())) {
+                    offerings.add(offering);
+                }
+            }
+        }
+        return offerings;
+    }
 
 @Override
 public String toString() {
