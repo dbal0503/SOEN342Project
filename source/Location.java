@@ -1,4 +1,3 @@
-import java.util.List;
 
 
 public class Location {
@@ -6,13 +5,11 @@ public class Location {
     private City city;
     private String room;
     private String organization;
-    private List<String> offerings;
 
     public Location(String address, String city, String organization, String room) {
         this.address = address;
         this.city = new City(city);
         this.organization = organization;
-        //this.offerings = offerings;
         this.room = room;
     }
     public String getRoom() {
@@ -46,21 +43,12 @@ public class Location {
         this.organization = organization;
     }
 
-    public List<String> getOfferings() {
-        return offerings;
-    }
-
-    public void setOfferings(List<String> offerings) {
-        this.offerings = offerings;
-    }
-
     @Override
     public String toString() {
         return "Location{" +
                 "address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", organization='" + organization + '\'' +
-                ", offerings=" + offerings +
                 '}';
     }
 }
