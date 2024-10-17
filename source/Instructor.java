@@ -14,12 +14,13 @@ public class Instructor extends Users {
         this.specialization = specialization;
         this.availabilities = availabilities;
     }
-    private static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
+
+    private  static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
         int int_phone_number;
         int_phone_number= parsephoneNumber(phone_number);
         boolean condition = true;
         int id =0;
-        Availabilities availabilities_Instructor = parseAvailabilities(availabilities);
+        Availabilities availabilities_Instructor = Availabilities.parseAvailabilities(availabilities);
         Specialization specialization_Specialization = new Specialization(specialization);
         if (Instructor.instructors == null){
             instructors = new ArrayList<>();
@@ -61,18 +62,7 @@ public class Instructor extends Users {
     public static List<Instructor> getInstructors() {
         return instructors;
     }
-    public static Availabilities parseAvailabilities(String availabilities){
-        String[] availabilitiesArray = availabilities.split(",");
-        City[] cities = new City[availabilitiesArray.length];
-        for (int i = 0; i < availabilitiesArray.length; i++) {
-            availabilitiesArray[i] = availabilitiesArray[i].trim();
-            City city = new City(availabilitiesArray[i]);
-            cities[i] = city;
-        }
-        Availabilities availabilities_Instructor = new Availabilities(cities);
-        return availabilities_Instructor;
 
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -147,17 +137,7 @@ public class Instructor extends Users {
             return false;
         }
     }
-    public static List<Offering> getOfferings(Instructor instructor) {
-        List<Offering> offerings = new ArrayList<>();
-        for (Offering offering : OfferingCatalog.getOfferings()) {
-            for (City city : instructor.availabilities.cities) {
-                if ((offering.getLocation().getCity().getName()).equals(city.getName())) {
-                    offerings.add(offering);
-                }
-            }
-        }
-        return offerings;
-    }
+
     public static void instructorMenu() {
         int choice;
         do {
@@ -168,7 +148,7 @@ public class Instructor extends Users {
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> {System.out.println("Viewing your offerings");
-                List<Offering> offerings = getOfferings((Instructor)Session.user);
+                List<Offering> offerings = Offering.getOfferings((Instructor)Session.user);
                 for (Offering offering : offerings) {
                     System.out.print("ID: " + offerings.indexOf(offering) + " ");
                     System.out.println(offering);
