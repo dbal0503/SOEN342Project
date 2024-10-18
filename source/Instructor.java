@@ -148,7 +148,7 @@ public class Instructor extends Users {
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> {System.out.println("Viewing your offerings");
-                List<Offering> offerings = Offering.getOfferings((Instructor)Session.user);
+                List<Offering> offerings = OfferingCatalog.getOfferings((Instructor)Session.user);
                 for (Offering offering : offerings) {
                     System.out.print("ID: " + offerings.indexOf(offering) + " ");
                     System.out.println(offering);
