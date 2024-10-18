@@ -1,0 +1,26 @@
+Operaction Contracts in Correspondance to the Sequence Diagram
+
+Operation Contract: registerInstructor(name, specialization, availabilities, phoneNumber)
+Precondition: 
+The instructor does not already exist in the system. 
+All required fields (name, specialization, availabilities, phoneNumber) are provided and valid.
+Postcondition: 
+An Instructor object has been created. 
+The Instructor object has been associated with the provided details (name, specialization, availabilities, phoneNumber). 
+The Instrctor object has been added to list.
+
+Operation Contract: instructorLogin(phoneNumber)
+Precondition: The instructor with the provided phone number exists in the system.
+Postcondition: The instructor's login session has been initiated. 
+
+Operation Contract: instructorMenu()
+Precondition: The instructor is logged into the system with an active session.
+Postcondition: The instructor is presented with the menu options.
+
+Operation Contract: getOfferings()
+Precondition: The instructor is logged in, and course offerings exist in the system.
+Postcondition: A list of available course offerings has been retrieved and displayed to the instructor. 
+
+OperationContract: selectOffering(id)
+Precondition: The instructor is logged in, and the offering with the provided ID exists.
+Postcondition: Instructor associated with offering. 
