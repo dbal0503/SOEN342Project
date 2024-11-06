@@ -14,6 +14,7 @@ public class Main {
         System.out.println("3. Instructor Registration");
         System.out.println("4. View Offerings Schedule");
         System.out.println("5. Make a booking");
+        System.err.println("6. Client Registration");
 
         choice = scanner.nextInt();
         
@@ -32,6 +33,16 @@ public class Main {
         
         
         }
+            case 6 -> {
+                System.out.println("Client Registration");
+                Client.clientRegistration();
+
+            }
+            case 7 -> {
+                System.out.println("Client Login");
+                Client.clientLogin();
+            }
+            
             case 0 -> System.out.println("Exiting");
             default -> System.out.println("Invalid choice");
         }
