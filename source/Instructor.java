@@ -30,8 +30,6 @@ public class Instructor extends Users {
 
         }
         for (Instructor instructor : instructors) {
-            Instructor newInstructor = new Instructor(name, id, int_phone_number, specialization_Specialization, availabilities_Instructor);
-            instructors.add(newInstructor);
 
             if (instructor.phone_number == int_phone_number) {
                 System.out.println("An Instructor with this phone number already exists");
