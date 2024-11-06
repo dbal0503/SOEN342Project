@@ -10,13 +10,14 @@ public class Main {
         System.out.println("Choose one of the following options");
         System.out.println("0. Exit");
         System.out.println("1. Admin Login");
-        System.out.println("2. Instructor Login");
+        System.out.println("2. Instructor Menu");
         System.out.println("3. Instructor Registration");
         System.out.println("4. View Offerings Schedule");
         System.out.println("5. Make a booking");
         System.out.println("6. Client Registration");
         System.out.println("7. Client Login");
         System.out.println("8: Make a Booking");
+        System.out.println("9: Instructor Login");
 
         choice = scanner.nextInt();
         
@@ -46,8 +47,15 @@ public class Main {
             }
             case 8 -> {
                 System.out.println("Client Enrollment");
-                    Enrollment.enrollmentMenu((Client) user);
+                    if (Session.hasSession()){
+                        Enrollment.enrollmentMenu((Client) user);
                 }
+                    else {System.out.println("User must sign in before making a booking");}
+                }
+            case 9 ->{
+                System.out.println("Instructor Login");
+                Instructor.instructorLogin();
+            }
 
 
             

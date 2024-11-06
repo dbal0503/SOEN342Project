@@ -1,6 +1,7 @@
-public class Session{
+public class Session {
     public static Users user;
     private static Session instance = null;
+
     private Session(Users user) {
         Session.user = user;
     }
@@ -11,5 +12,7 @@ public class Session{
         }
         return instance;
     }
+    public static boolean hasSession() {
+        return instance != null;
+    }
 }
-
