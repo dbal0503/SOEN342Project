@@ -66,6 +66,13 @@ public class Client extends Users{
             System.out.println("Please enter the phone number of the guardian");
             String guardianphone = scanner.nextLine();
             int guardian_int_phonenumber = parsephoneNumber(guardianphone);
+            for (Client client : clients) {
+
+            if (client.phone_number == int_phone_number) {
+                System.out.println("A Client with this phone number already exists");
+                return false;
+            }
+            }
             
             while(guardian_condition){
             id = (int)(Math.random() * 1000);
@@ -88,10 +95,10 @@ public class Client extends Users{
             return true;
 
         }
-        for (Client instructor : clients) {
+        for (Client client : clients) {
 
-            if (instructor.phone_number == int_phone_number) {
-                System.out.println("An Instructor with this phone number already exists");
+            if (client.phone_number == int_phone_number) {
+                System.out.println("A Client with this phone number already exists");
                 return false;
             }
         }
