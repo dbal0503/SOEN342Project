@@ -1,0 +1,18 @@
+# Ignore .class files
+*.class
+
+# Ignore IDE files and configurations (IntelliJ, VS Code)
+.idea/
+.vscode/
+
+# Ignore build directories
+/target/
+/build/
+
+/shelf/
+httpRequests/
+/dataSources/
+/dataSources.local.xml
+
+# Ignore workspace-related files
+/.idea/workspace.xml

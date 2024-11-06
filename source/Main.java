@@ -1,10 +1,10 @@
-
 import java.util.Scanner;
 
 public class Main {
     public static void menu(){
         Scanner scanner = new Scanner(System.in);
         int choice;
+        Users user = null;
 
         do{
         System.out.println("Choose one of the following options");
@@ -14,7 +14,9 @@ public class Main {
         System.out.println("3. Instructor Registration");
         System.out.println("4. View Offerings Schedule");
         System.out.println("5. Make a booking");
-        System.err.println("6. Client Registration");
+        System.out.println("6. Client Registration");
+        System.out.println("7. Client Login");
+        System.out.println("8: Make a Booking");
 
         choice = scanner.nextInt();
         
@@ -31,8 +33,7 @@ public class Main {
             case 4 -> Schedule.viewPublicOfferings();
             case 5 -> {System.out.println("Booking Interface");
         
-        
-        }
+            }
             case 6 -> {
                 System.out.println("Client Registration");
                 Client.clientRegistration();
@@ -40,8 +41,15 @@ public class Main {
             }
             case 7 -> {
                 System.out.println("Client Login");
-                Client.clientLogin();
+                Users client = Client.clientLogin();
+                user = client;
             }
+            case 8 -> {
+                System.out.println("Client Enrollment");
+                    Enrollment.enrollmentMenu((Client) user);
+                }
+
+
             
             case 0 -> System.out.println("Exiting");
             default -> System.out.println("Invalid choice");

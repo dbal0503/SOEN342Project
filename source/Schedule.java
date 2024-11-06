@@ -10,10 +10,16 @@ public class Schedule {
         Schedule.schedule.add(offering);
     }
     }
+    public static void removeOffering(Offering offering) {
+        if (offering.isVisible()){
+            Schedule.schedule.remove(offering);
+        }
+    }
 
-    public List<Offering> getOfferings() {
+    public static List<Offering> getOfferings() {
         return schedule;
     }
+
     public static void viewPublicOfferings(){
         for(Offering offering : schedule){
             System.out.print("ID: " + schedule.indexOf(offering) + " ");

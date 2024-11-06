@@ -1,4 +1,5 @@
-
+import java.util.List;
+import java.util.ArrayList;
 
 public class Offering {
     private Location location;
@@ -12,6 +13,7 @@ public class Offering {
     private Instructor instructor;
     private String date;
     private String offeringName;
+    private List<Client> enrolledClients = new ArrayList<>();
 
     public int getEnrolled() {
         return enrolled;
@@ -41,6 +43,22 @@ public class Offering {
         setVisible(true);
         OfferingCatalog.removeOffering(this);
         Schedule.addOffering(this);
+    }
+    public void enrollClient(Client client) {
+        if (isGroup && enrolled < capacity) {
+            enrolledClients.add(client);
+            enrolled++;
+
+            if(enrolled == capacity){
+                Schedule.removeOffering(this);
+            }
+        }
+        else if (!isGroup) {
+            enrolledClients.add(client);
+            enrolled++;
+            setAvailable(false);
+            Schedule.removeOffering(this);
+        }
     }
     
     // Parameterized constructor

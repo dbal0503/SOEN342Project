@@ -16,7 +16,17 @@ public class Client extends Users{
         this.guardian = guardian;
     }
 
-    public static boolean clientLogin(){
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public static Client clientLogin(){
         System.out.println("Client Login");
         System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
         String phone_number = scanner.nextLine();
@@ -24,11 +34,11 @@ public class Client extends Users{
         if (client != null) {
             System.out.println("Logged in successfully"); 
             Session.getInstance(client);
-            return true;
+            return client;
         }
         else {
             System.out.println("Login failed");
-            return false;
+            return null;
         }
     }
 
@@ -118,5 +128,7 @@ public class Client extends Users{
         clients.add(newClient);
         return true;
     }
+
+
 
 }
