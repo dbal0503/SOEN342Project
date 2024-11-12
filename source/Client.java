@@ -10,7 +10,7 @@ public class Client extends Users{
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    private Client(String name, int uniqueId, int phone_number, int age,  Client guardian) {
+    public Client(String name, int uniqueId, int phone_number, int age,  Client guardian) {
         this.name = name;
         this.uniqueId = uniqueId;
         this.age = age;

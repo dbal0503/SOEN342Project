@@ -3,7 +3,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database{
-    public static void connecttoDB(){
+    private static Connection connection = null;
+    public static Connection connecttoDB(){
         System.out.println("Connecting to Database");
 
         String url = System.getenv("DB_URL_342");
@@ -16,6 +17,7 @@ public class Database{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             
-        } 
+        }
+        return connection;
     }
 }
