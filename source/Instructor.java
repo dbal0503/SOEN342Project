@@ -6,7 +6,7 @@ public class Instructor extends Users {
     public Availabilities availabilities;
     private static List<Instructor> instructors;
     private static final Scanner scanner = new Scanner(System.in);
-    
+
     private Instructor(String name, int id, int phone_number, Specialization specialization, Availabilities availabilities) {
         this.name = name;
         this.uniqueId = id;
@@ -37,22 +37,22 @@ public class Instructor extends Users {
             }
         }
         while(condition){
-        id = (int)(Math.random() * 1000);
-        for(Instructor instructor : instructors){
-            if(instructor.uniqueId == id){
-                condition = true;
-                break;
+            id = (int)(Math.random() * 1000);
+            for(Instructor instructor : instructors){
+                if(instructor.uniqueId == id){
+                    condition = true;
+                    break;
+                }
+                else{
+                    condition = false;
+                }
             }
-            else{
-                condition = false;
-            }
-        }
         }
         Instructor newInstructor = new Instructor(name, id, int_phone_number, specialization_Specialization, availabilities_Instructor);
         instructors.add(newInstructor);
         return true;
     }
-    
+
     public String getName() {
         return this.name;
     }
@@ -126,7 +126,7 @@ public class Instructor extends Users {
         String phone_number = scanner.nextLine();
         Instructor instructor = findInstructor(phone_number);
         if (instructor != null) {
-            System.out.println("Logged in successfully"); 
+            System.out.println("Logged in successfully");
             Session.getInstance(instructor);
             return true;
         }
@@ -146,12 +146,12 @@ public class Instructor extends Users {
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> {System.out.println("Viewing your offerings");
-                List<Offering> offerings = OfferingCatalog.getOfferings((Instructor)Session.user);
-                for (Offering offering : offerings) {
-                    System.out.print("ID: " + offerings.indexOf(offering) + " ");
-                    System.out.println(offering);
-                
-                }
+                    List<Offering> offerings = OfferingCatalog.getOfferings((Instructor)Session.user);
+                    for (Offering offering : offerings) {
+                        System.out.print("ID: " + offerings.indexOf(offering) + " ");
+                        System.out.println(offering);
+
+                    }
                 }
                 case 2 -> {
                     System.out.println("Enter the id of the offering you would like to accept: ");
@@ -160,7 +160,7 @@ public class Instructor extends Users {
                     offering.setInstructor((Instructor)Session.user);
 
                 }
-                
+
                 case 0 -> System.out.println("Logout");
                 default -> System.out.println("Invalid choice");
             }
