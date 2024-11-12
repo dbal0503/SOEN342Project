@@ -66,6 +66,7 @@ public class Main {
     }
     
     public static void main(String[] args) {
+        Database.connecttoDB();
         System.out.println("------------------------------------------------------------------");
         Admin admin = new Admin("John", 1);
         Admin admin1 = new Admin("Susan", 2);

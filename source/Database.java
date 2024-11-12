@@ -6,9 +6,9 @@ public class Database{
     public static void connecttoDB(){
         System.out.println("Connecting to Database");
 
-        String url = "jdbc:postgresql://localhost:5432/soen342";
-        String user = "admin";
-        String password = "admin1";
+        String url = System.getenv("DB_URL_342");
+        String user = System.getenv("DB_342_USER");
+        String password = System.getenv("DB_342_PASSWORD");
 
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
