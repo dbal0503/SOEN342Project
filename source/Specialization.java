@@ -4,5 +4,8 @@ public class Specialization{
     public Specialization(String specialization) {
         this.specialization = specialization;
     }
-    
+
+    public String getName() {
+        return specialization;
+    }
 }
