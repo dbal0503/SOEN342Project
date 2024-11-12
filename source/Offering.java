@@ -48,6 +48,7 @@ public class Offering {
         if (isGroup && enrolled < capacity) {
             enrolledClients.add(client);
             enrolled++;
+            client.bookings.add(this);
 
             if(enrolled == capacity){
                 Schedule.removeOffering(this);
@@ -56,6 +57,7 @@ public class Offering {
         else if (!isGroup) {
             enrolledClients.add(client);
             enrolled++;
+            client.bookings.add(this);
             setAvailable(false);
             Schedule.removeOffering(this);
         }
