@@ -15,6 +15,8 @@ public class Offering {
     private String offeringName;
     private List<Client> enrolledClients = new ArrayList<>();
 
+    private List<Booking> bookings = new ArrayList<>();
+
     public int getEnrolled() {
         return enrolled;
     }
@@ -48,7 +50,8 @@ public class Offering {
         if (isGroup && enrolled < capacity) {
             enrolledClients.add(client);
             enrolled++;
-            client.bookings.add(this);
+            Booking booking = new Booking(client, this);
+            bookings.add(booking);
 
             if(enrolled == capacity){
                 Schedule.removeOffering(this);
@@ -57,7 +60,8 @@ public class Offering {
         else if (!isGroup) {
             enrolledClients.add(client);
             enrolled++;
-            client.bookings.add(this);
+            Booking booking = new Booking(client, this);
+            bookings.add(booking);
             setAvailable(false);
             Schedule.removeOffering(this);
         }
@@ -70,6 +74,8 @@ public class Offering {
         this.endTime = endTime;
         this.isGroup = isGroup;
         this.capacity = capacity;
+        this.date =date;
+        this.offeringName = offeringName;
     }
 
 

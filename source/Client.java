@@ -7,6 +7,7 @@ public class Client extends Users{
     public int age;
     public Client guardian;
     private static List<Client> clients;
+
     private static final Scanner scanner = new Scanner(System.in);
 
     private Client(String name, int uniqueId, int phone_number, int age,  Client guardian) {

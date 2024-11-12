@@ -45,7 +45,7 @@ public class Enrollment {
         if (offering.isGroup()) {
             // Group offering
             if (offering.getEnrolled() < offering.getCapacity()) {
-                offering.enrollClient(client);
+                enrollClient(client,offering);
                 return true;
             } else {
                 System.out.println("No available seats in this group offering.");
@@ -54,7 +54,7 @@ public class Enrollment {
         } else {
             // Private offering:
             if (offering.isAvailable()) {
-                offering.enrollClient(client);
+                enrollClient(client,offering);
                 return true;
             } else {
                 System.out.println("Private offering is no longer available.");
@@ -69,4 +69,26 @@ public class Enrollment {
             return null;
         }
     }
+
+    public static void enrollClient(Client client, Offering offering) {
+        if (offering.isGroup() && offering.getEnrolled() < offering.getCapacity()) {
+            //enrolledClients.add(client);
+            //enrolled++;
+            Booking booking = new Booking(client, offering);
+            //bookings.add(booking);
+
+            if(offering.getEnrolled() == offering.getCapacity()){
+                offering.setAvailable(false);
+            }
+        }
+        else if (!offering.isGroup()) {
+           // enrolledClients.add(client);
+           // enrolled++;
+            Booking booking = new Booking(client, offering);
+           // bookings.add(booking);
+           offering.setAvailable(false);
+          //  Schedule.removeOffering(this);
+        }
+    }
+
 }
