@@ -7,6 +7,10 @@ public class Database{
     public static final String user = System.getenv("DB_342_USER");
     public static final String password = System.getenv("DB_342_PASSWORD");
 
+    static{
+
+    }
+
     public static Connection connecttoDB(){
 
         try {
