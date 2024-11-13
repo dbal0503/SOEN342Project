@@ -20,6 +20,68 @@ public class Database{
         return null;
     }
 
+    //static {initDatabase();}
+
+    public static void initDatabase(){
+        Connection connection = connecttoDB();
+
+        if (connection != null) {
+            try (Statement stmt = connection.createStatement()) {
+
+                String createClientsTable = "CREATE TABLE IF NOT EXISTS clients (" +
+                        "uniqueid INT PRIMARY KEY AUTO_INCREMENT," +
+                        "name TEXT," +
+                        "phonenumber TEXT," +
+                        "age INT," +
+                        "guardianid INT)";
+
+                String createOfferingsTable = "CREATE TABLE IF NOT EXISTS offerings (" +
+                        "id INT PRIMARY KEY AUTO_INCREMENT," +
+                        "name TEXT," +
+                        "description TEXT," +
+                        "capacity INT," +
+                        "is_group BOOLEAN," +
+                        "is_available BOOLEAN," +
+                        "instructor_id INT," +
+                        "FOREIGN KEY (instructor_id) REFERENCES instructors(id))";
+                stmt.executeUpdate(createOfferingsTable);
+
+                String createBookingsTable = "CREATE TABLE IF NOT EXISTS bookings (" +
+                        "id INT PRIMARY KEY AUTO_INCREMENT," +
+                        "client_id INT," +
+                        "offering_id INT," +
+                        "booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                        "status TEXT," +
+                        "FOREIGN KEY (client_id) REFERENCES clients(uniqueid)," +
+                        "FOREIGN KEY (offering_id) REFERENCES offerings(id))";
+                stmt.executeUpdate(createBookingsTable);
+
+                System.out.println("Tables created or verified successfully.");
+
+            } catch (SQLException e) {
+                System.err.println("Error creating tables: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (connection != null) {
+                        connection.close(); // Close th connect
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Error closing connection: " + e.getMessage());
+                }
+            }
+        } else {
+            System.err.println("Failed to connect to the database.");
+        }
+    }
+
+
+
+
+
+
+
+/*
     private static final String[] MIGRATIONS = {
 
             """
@@ -55,7 +117,7 @@ public class Database{
             EXECUTE FUNCTION update_updated_at_column()"""
     };
 
-    static {
+   /* static {
         try {
             Class.forName("org.postgresql.Driver");
             runMigrations();
@@ -96,4 +158,5 @@ public class Database{
     public static void initializeDatabase() {
         runMigrations();
     }
+    */
 }

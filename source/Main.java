@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void menu(){
+        //Database.initDatabase();
         Scanner scanner = new Scanner(System.in);
         int choice;
         Users user = null;
