@@ -112,6 +112,6 @@ public class OfferingDAO {
         }
         return offerings;
     }
-    
+
 
 }

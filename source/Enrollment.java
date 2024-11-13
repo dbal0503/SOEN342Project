@@ -75,7 +75,7 @@ public class Enrollment {
             //enrolledClients.add(client);
             //enrolled++;
             Booking booking = new Booking(client, offering);
-            //bookings.add(booking);
+            BookingDAO.addBooking(offering.getId(),client.getUniqueId());
 
             if(offering.getEnrolled() == offering.getCapacity()){
                 offering.setAvailable(false);
@@ -87,7 +87,6 @@ public class Enrollment {
             Booking booking = new Booking(client, offering);
            // bookings.add(booking);
            offering.setAvailable(false);
-          //  Schedule.removeOffering(this);
         }
     }
 
