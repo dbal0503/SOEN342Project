@@ -4,55 +4,38 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.SQLException;
 public class ClientDOA {
-    public static void createTable() {
-        String sql = """
-                CREATE TABLE IF NOT EXISTS clients (
-                    uniqueId SERIAL PRIMARY KEY,
-                    name VARCHAR(100) NOT NULL,
-                    phone_number VARCHAR(15) NOT NULL UNIQUE,
-                    age INT NOT NULL,
-                    guardianId INT REFERENCES clients(uniqueId)
-                );
-                """;
+
+    public static Integer insertClient(String name, String phoneNumber, int age, Integer guardianId) {
+        String sql = "INSERT INTO clients (name, phone_number, age, guardianId) VALUES (?, ?, ?, ?) RETURNING uniqueId";
 
         try (Connection conn = Database.connecttoDB();
-             Statement stmt = conn.createStatement()) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            stmt.execute(sql);
-            System.out.println("Table 'clients' created successfully.");
+            pstmt.setString(1, name);
+            pstmt.setString(2, phoneNumber);
+            pstmt.setInt(3, age);
+
+            if (guardianId != null) {
+                pstmt.setInt(4, guardianId);
+            } else {
+                pstmt.setNull(4, Types.INTEGER);
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int newClientId = rs.getInt("uniqueId");
+                System.out.println("Client inserted successfully with ID: " + newClientId);
+                return newClientId;
+            }
 
         } catch (SQLException e) {
-            System.out.println("Error creating table: " + e.getMessage());
+            System.out.println("Error inserting client: " + e.getMessage());
         }
+        return null;
     }
 
 
-    public class ClientDAO {
-        public static void insertClient(String name, String phoneNumber, int age, Integer guardianId) {
-            String sql = "INSERT INTO clients (name, phone_number, age, guardianId) VALUES (?, ?, ?, ?)";
-
-            try (Connection conn = Database.connecttoDB();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-                pstmt.setString(1, name);
-                pstmt.setString(2, phoneNumber);
-                pstmt.setInt(3, age);
-
-                if (guardianId != null) {
-                    pstmt.setInt(4, guardianId);
-                } else {
-                    pstmt.setNull(4, Types.INTEGER);
-                }
-
-                pstmt.executeUpdate();
-                System.out.println("Client inserted successfully.");
-
-            } catch (SQLException e) {
-                System.out.println("Error inserting client: " + e.getMessage());
-            }
-        }
-
-        public static void getAllClients() {
+    public static void getAllClients() {
             String sql = "SELECT * FROM clients";
 
             try (Connection conn = Database.connecttoDB();
@@ -91,8 +74,7 @@ public class ClientDOA {
                     int guardianId = rs.getInt("guardianId");
 
                     Client guardian = guardianId > 0 ? getClientById(guardianId) : null;
-                    int phone_number = Users.parsephoneNumber(phoneNumber);
-                    return new Client(name, uniqueId, phone_number, age, guardian);
+                    return new Client(name, uniqueId, phoneNumber, age, guardian);
                 }
 
             } catch (SQLException e) {
@@ -140,7 +122,32 @@ public class ClientDOA {
                 System.out.println("Error updating client: " + e.getMessage());
             }
         }
+
+
+        public static Client getClientByPhoneNumber(String phoneNumber) {
+            String sql = "SELECT * FROM clients WHERE phone_number = ?";
+
+            try (Connection conn = Database.connecttoDB();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, phoneNumber);
+                ResultSet rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    int uniqueId = rs.getInt("uniqueId");
+                    String name = rs.getString("name");
+                    int age = rs.getInt("age");
+                    int guardianId = rs.getInt("guardianId");
+                    Client guardian = guardianId > 0 ? ClientDOA.getClientById(guardianId) : null;
+
+                    return new Client(name, uniqueId, phoneNumber, age, guardian);
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Error retrieving client: " + e.getMessage());
+            }
+            return null;
+        }
     }
 
 
-}

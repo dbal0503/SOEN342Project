@@ -7,7 +7,7 @@ public class Instructor extends Users {
     private static List<Instructor> instructors;
     private static final Scanner scanner = new Scanner(System.in);
 
-    private Instructor(String name, int id, int phone_number, Specialization specialization, Availabilities availabilities) {
+    private Instructor(String name, int id, String phone_number, Specialization specialization, Availabilities availabilities) {
         this.name = name;
         this.uniqueId = id;
         this.phone_number = phone_number;
@@ -16,7 +16,7 @@ public class Instructor extends Users {
     }
 
     private  static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
-        int int_phone_number;
+        String int_phone_number;
         int_phone_number= parsephoneNumber(phone_number);
         boolean condition = true;
         int id =0;
@@ -73,10 +73,10 @@ public class Instructor extends Users {
     public void setId(int id) {
         this.uniqueId = id;
     }
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return this.phone_number;
     }
-    public void setPhoneNumber(int phone_number) {
+    public void setPhoneNumber(String phone_number) {
         this.phone_number = phone_number;
     }
     public Specialization getSpecialization() {

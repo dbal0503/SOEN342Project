@@ -10,7 +10,7 @@ public class InstructorDAO {
             PreparedStatement preparedStatement = conn.prepareStatement(insertsql);
             preparedStatement.setString(1, instructor.getName());
             preparedStatement.setInt(2, instructor.getId());
-            preparedStatement.setInt(3, instructor.getPhoneNumber());
+            preparedStatement.setString(3, instructor.getPhoneNumber());
             preparedStatement.setString(4, instructor.getSpecialization().getName());
         }
         catch (SQLException e){
