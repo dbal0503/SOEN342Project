@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
-    private static List<Offering> schedule = new ArrayList<>();
+    private static List<Offering> schedule = OfferingDAO.getClientVisibleOfferings();
 
     public static void addOffering(Offering offering) {
         if (offering.isVisible()){
@@ -26,4 +26,5 @@ public class Schedule {
             System.out.println(offering);
     }
 }
+
 }

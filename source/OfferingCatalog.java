@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OfferingCatalog {
-    private static List<Offering> offeringCatalog = new ArrayList<>();
+    private static List<Offering> offeringCatalog = OfferingDAO.getInstructorRestrictedOfferings();
 
     public static void addOffering(Offering offering) {
         offeringCatalog.add(offering);
