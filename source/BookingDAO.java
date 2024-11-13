@@ -1,6 +1,9 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class BookingDAO {
 
@@ -44,4 +47,34 @@ public class BookingDAO {
     }
 
 
+    public static List<Booking> getBookingsByClient(int clientId) {
+        List<Booking> bookings = new ArrayList<>();
+
+        String query = "SELECT * FROM bookings WHERE client_id = ?";
+
+        try (Connection connection = Database.connecttoDB();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, clientId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int bookingId = rs.getInt("booking_id");
+                    int offeringId = rs.getInt("offering_id");
+                    Date bookingDate = rs.getDate("booking_date");
+                    String status = rs.getString("status");
+                    
+                    Booking booking = new Booking(bookingId, clientId, offeringId);
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Exception: Unable to retrieve bookings for client.");
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
 }
+
+
