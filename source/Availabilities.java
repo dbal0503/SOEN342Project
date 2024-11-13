@@ -15,4 +15,12 @@ public class Availabilities{
         return availabilities_Instructor;
 
     }
+
+    public String getCitiesasString() {
+        StringBuilder blank = new StringBuilder();
+        for (int i =0; i<this.cities.length; i++){
+            blank.append(this.cities[i].getName()).append(" ,");
+        }
+        return blank.toString();
+    }
 }

@@ -1,13 +1,22 @@
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 public class Instructor extends Users {
     public Specialization specialization;
     public Availabilities availabilities;
-    private static List<Instructor> instructors;
     private static final Scanner scanner = new Scanner(System.in);
+    private static InstructorDAO instructorDAO;
 
-    private Instructor(String name, int id, int phone_number, Specialization specialization, Availabilities availabilities) {
+    static {
+        try{
+            instructorDAO = new InstructorDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Instructor(String name, int id, String phone_number, Specialization specialization, Availabilities availabilities) {
         this.name = name;
         this.uniqueId = id;
         this.phone_number = phone_number;
@@ -16,41 +25,20 @@ public class Instructor extends Users {
     }
 
     private  static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
-        int int_phone_number;
-        int_phone_number= parsephoneNumber(phone_number);
-        boolean condition = true;
-        int id =0;
-        Availabilities availabilities_Instructor = Availabilities.parseAvailabilities(availabilities);
-        Specialization specialization_Specialization = new Specialization(specialization);
-        if (Instructor.instructors == null){
-            instructors = new ArrayList<>();
-            Instructor newInstructor = new Instructor(name, id, int_phone_number, specialization_Specialization, availabilities_Instructor);
-            instructors.add(newInstructor);
-            return true;
+        try{
+            int int_phone_number = parsephoneNumber(phone_number);
 
-        }
-        for (Instructor instructor : instructors) {
+            Availabilities availabilities_Instrucotor = Availabilities.parseAvailabilities(availabilities);
+            Specialization specialization_Instructor = new Specialization(specialization);
 
-            if (instructor.phone_number == int_phone_number) {
-                System.out.println("An Instructor with this phone number already exists");
-                return false;
-            }
+            Instructor newInstructor = new Instructor(name, 0, phone_number, specialization_Instructor, availabilities_Instrucotor);
+
+            int generatedId = instructorDAO.addInstructor(newInstructor);
+            newInstructor.setId(generatedId);
+            return generatedId > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        while(condition){
-            id = (int)(Math.random() * 1000);
-            for(Instructor instructor : instructors){
-                if(instructor.uniqueId == id){
-                    condition = true;
-                    break;
-                }
-                else{
-                    condition = false;
-                }
-            }
-        }
-        Instructor newInstructor = new Instructor(name, id, int_phone_number, specialization_Specialization, availabilities_Instructor);
-        instructors.add(newInstructor);
-        return true;
     }
 
     public String getName() {
@@ -58,7 +46,11 @@ public class Instructor extends Users {
     }
 
     public static List<Instructor> getInstructors() {
-        return instructors;
+        try {
+            return instructorDAO.getAllInstructor();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -73,10 +65,10 @@ public class Instructor extends Users {
     public void setId(int id) {
         this.uniqueId = id;
     }
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return this.phone_number;
     }
-    public void setPhoneNumber(int phone_number) {
+    public void setPhoneNumber(String phone_number) {
         this.phone_number = phone_number;
     }
     public Specialization getSpecialization() {
@@ -111,29 +103,20 @@ public class Instructor extends Users {
     }
 
     public static Instructor findInstructor(String phone_number) {
-        for (Instructor instructor : instructors) {
-            if (instructor.phone_number == parsephoneNumber(phone_number)) {
-                System.out.println("Instructor found");
-                return instructor;
-            }
+        try{
+            return instructorDAO.getInstructorbyphonenumber(phone_number);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("Instructor not found");
-        return null;
     }
     public static boolean instructorLogin() {
         System.out.println("instructor Login");
         System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
         String phone_number = scanner.nextLine();
         Instructor instructor = findInstructor(phone_number);
-        if (instructor != null) {
-            System.out.println("Logged in successfully");
-            Session.getInstance(instructor);
-            return true;
-        }
-        else {
-            System.out.println("Login failed");
-            return false;
-        }
+        System.out.println("Logged in successfully");
+        Session.getInstance(instructor);
+        return true;
     }
 
     public static void instructorMenu() {
