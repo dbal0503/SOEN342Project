@@ -6,7 +6,7 @@ import java.sql.SQLException;
 public class ClientDOA {
 
     public static Integer insertClient(String name, String phoneNumber, int age, Integer guardianId) {
-        String sql = "INSERT INTO clients (name, phone_number, age, guardianId) VALUES (?, ?, ?, ?) RETURNING uniqueId";
+        String sql = "INSERT INTO clients (name, phonenumber, age, guardianid) VALUES (?, ?, ?, ?) RETURNING uniqueid";
 
         try (Connection conn = Database.connecttoDB();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -23,7 +23,7 @@ public class ClientDOA {
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                int newClientId = rs.getInt("uniqueId");
+                int newClientId = rs.getInt("uniqueid");
                 System.out.println("Client inserted successfully with ID: " + newClientId);
                 return newClientId;
             }
@@ -43,11 +43,11 @@ public class ClientDOA {
                  ResultSet rs = pstmt.executeQuery()) {
 
                 while (rs.next()) {
-                    int uniqueId = rs.getInt("uniqueId");
+                    int uniqueId = rs.getInt("uniqueid");
                     String name = rs.getString("name");
-                    String phoneNumber = rs.getString("phone_number");
+                    String phoneNumber = rs.getString("phonenumber");
                     int age = rs.getInt("age");
-                    int guardianId = rs.getInt("guardianId");
+                    int guardianId = rs.getInt("guardianid");
 
                     System.out.printf("ID: %d, Name: %s, Phone: %s, Age: %d, Guardian ID: %d%n",
                             uniqueId, name, phoneNumber, age, guardianId);
@@ -69,9 +69,9 @@ public class ClientDOA {
 
                 if (rs.next()) {
                     String name = rs.getString("name");
-                    String phoneNumber = rs.getString("phone_number");
+                    String phoneNumber = rs.getString("phonenumber");
                     int age = rs.getInt("age");
-                    int guardianId = rs.getInt("guardianId");
+                    int guardianId = rs.getInt("guardianid");
 
                     Client guardian = guardianId > 0 ? getClientById(guardianId) : null;
                     return new Client(name, uniqueId, phoneNumber, age, guardian);
@@ -98,14 +98,14 @@ public class ClientDOA {
             }
         }
 
-        public static void updateClient(int uniqueId, String name, String phoneNumber, int age, Integer guardianId) {
-            String sql = "UPDATE clients SET name = ?, phone_number = ?, age = ?, guardianId = ? WHERE uniqueId = ?";
+        public static void updateClient(int uniqueId, String name, String phonenumber, int age, Integer guardianId) {
+            String sql = "UPDATE clients SET name = ?, phonenumber = ?, age = ?, guardianid = ? WHERE uniqueid = ?";
 
             try (Connection conn = Database.connecttoDB();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
                 pstmt.setString(1, name);
-                pstmt.setString(2, phoneNumber);
+                pstmt.setString(2, phonenumber);
                 pstmt.setInt(3, age);
 
                 if (guardianId != null) {
@@ -125,7 +125,7 @@ public class ClientDOA {
 
 
         public static Client getClientByPhoneNumber(String phoneNumber) {
-            String sql = "SELECT * FROM clients WHERE phone_number = ?";
+            String sql = "SELECT * FROM clients WHERE phonenumber = ?";
 
             try (Connection conn = Database.connecttoDB();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -134,10 +134,10 @@ public class ClientDOA {
                 ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
-                    int uniqueId = rs.getInt("uniqueId");
+                    int uniqueId = rs.getInt("uniqueid");
                     String name = rs.getString("name");
                     int age = rs.getInt("age");
-                    int guardianId = rs.getInt("guardianId");
+                    int guardianId = rs.getInt("guardianid");
                     Client guardian = guardianId > 0 ? ClientDOA.getClientById(guardianId) : null;
 
                     return new Client(name, uniqueId, phoneNumber, age, guardian);
