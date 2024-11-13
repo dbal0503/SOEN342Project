@@ -77,16 +77,22 @@ public class Enrollment {
             Booking booking = new Booking(client, offering);
             BookingDAO.addBooking(offering.getId(),client.getUniqueId());
 
+            offering.setEnrolled(offering.getEnrolled() + 1);
+
             if(offering.getEnrolled() == offering.getCapacity()){
                 offering.setAvailable(false);
             }
+            BookingDAO.updateOfferingInDatabase(offering);
         }
-        else if (!offering.isGroup()) {
+        else { ///booking is private
            // enrolledClients.add(client);
            // enrolled++;
             Booking booking = new Booking(client, offering);
            // bookings.add(booking);
-           offering.setAvailable(false);
+            BookingDAO.addBooking(offering.getId(), client.getUniqueId());
+            offering.setAvailable(false);
+            offering.setEnrolled(offering.getEnrolled() + 1);
+            BookingDAO.updateOfferingInDatabase(offering);
         }
     }
 

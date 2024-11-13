@@ -24,4 +24,24 @@ public class BookingDAO {
         }
     }
 
+    public static void updateOfferingInDatabase(Offering offering) {
+        String sql = "UPDATE offerings SET available = ?, enrolled = ? WHERE id = ?";
+
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setBoolean(1, offering.isAvailable());
+            pstmt.setInt(2, offering.getEnrolled());
+            pstmt.setInt(3, offering.getId());
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Offering availability and enrolled count updated successfully.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error updating offering in database: " + e.getMessage());
+        }
+    }
+
+
 }
