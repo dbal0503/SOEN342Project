@@ -9,13 +9,10 @@ public class Database{
 
     public static Connection connecttoDB(){
 
-
-
         try {
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-
         }
         return null;
     }

@@ -26,7 +26,6 @@ public class Instructor extends Users {
 
     private  static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
         try{
-            int int_phone_number = parsephoneNumber(phone_number);
 
             Availabilities availabilities_Instrucotor = Availabilities.parseAvailabilities(availabilities);
             Specialization specialization_Instructor = new Specialization(specialization);

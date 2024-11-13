@@ -1,6 +1,8 @@
 
 
 public class Location {
+
+    private int id;
     private String address;
     private City city;
     private String room;
@@ -11,6 +13,14 @@ public class Location {
         this.city = new City(city);
         this.organization = organization;
         this.room = room;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     public String getRoom() {
         return room;

@@ -2,6 +2,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Offering {
+
+    private int id;
     private Location location;
     private String startTime;
     private String endTime;
@@ -32,6 +34,13 @@ public class Offering {
     public Offering() {
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public Location getLocation() {
         return location;
     }
@@ -50,8 +59,8 @@ public class Offering {
         if (isGroup && enrolled < capacity) {
             enrolledClients.add(client);
             enrolled++;
-            Booking booking = new Booking(client, this);
-            bookings.add(booking);
+            //Booking booking = new Booking(client, this);
+           // bookings.add(booking);
 
             if(enrolled == capacity){
                 Schedule.removeOffering(this);
@@ -60,8 +69,8 @@ public class Offering {
         else if (!isGroup) {
             enrolledClients.add(client);
             enrolled++;
-            Booking booking = new Booking(client, this);
-            bookings.add(booking);
+            //Booking booking = new Booking(client, this);
+           // bookings.add(booking);
             setAvailable(false);
             Schedule.removeOffering(this);
         }
@@ -107,7 +116,7 @@ public class Offering {
         return visible;
     }
 
-    private void setVisible(boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
     
