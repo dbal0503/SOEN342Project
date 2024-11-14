@@ -29,14 +29,15 @@ public class Database{
             try (Statement stmt = connection.createStatement()) {
 
                 String createClientsTable = "CREATE TABLE IF NOT EXISTS clients (" +
-                        "uniqueid INT PRIMARY KEY AUTO_INCREMENT," +
+                        "uniqueid SERIAL PRIMARY KEY," +
                         "name TEXT," +
                         "phonenumber TEXT," +
                         "age INT," +
                         "guardianid INT)";
+                stmt.executeUpdate(createClientsTable);
 
                 String createOfferingsTable = "CREATE TABLE IF NOT EXISTS offerings (" +
-                        "id INT PRIMARY KEY AUTO_INCREMENT," +
+                        "id SERIAL PRIMARY KEY," +
                         "name TEXT," +
                         "description TEXT," +
                         "capacity INT," +
@@ -47,7 +48,7 @@ public class Database{
                 stmt.executeUpdate(createOfferingsTable);
 
                 String createBookingsTable = "CREATE TABLE IF NOT EXISTS bookings (" +
-                        "id INT PRIMARY KEY AUTO_INCREMENT," +
+                        "id SERIAL PRIMARY KEY," +
                         "client_id INT," +
                         "offering_id INT," +
                         "booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
