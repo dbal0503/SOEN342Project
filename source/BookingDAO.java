@@ -75,6 +75,52 @@ public class BookingDAO {
         return bookings;
     }
 
+    public static boolean cancelBooking(int clientId, int bookingId) {
+        if (findBookingByClientIdAndBookingId(clientId, bookingId)) {
+            return deleteBooking(bookingId);
+        } else {
+            System.out.println("Booking not found for the specified client and booking ID.");
+            return false;
+        }
+    }
+
+    private static boolean findBookingByClientIdAndBookingId(int clientId, int bookingId) {
+        String query = "SELECT id FROM bookings WHERE client_id = ? AND id = ?";
+        try (Connection connection = Database.connecttoDB();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, clientId);
+            pstmt.setInt(2, bookingId);
+
+            return pstmt.executeQuery().next();  // result is found =booking exists
+
+        } catch (SQLException e) {
+            System.err.println("Error locating booking: " + e.getMessage());
+            return false;
+        }
+    }
+    private static boolean deleteBooking(int bookingId) {
+        String deleteQuery = "DELETE FROM bookings WHERE id = ?";
+        try (Connection connection = Database.connecttoDB();
+             PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
+
+            pstmt.setInt(1, bookingId);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Booking cancelled successfully.");
+                return true;
+            } else {
+                System.out.println("Failed to cancel booking.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error deleting booking: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
 
 
