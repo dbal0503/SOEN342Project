@@ -6,13 +6,23 @@ public class Session {
         Session.user = user;
     }
 
-    public static Session getInstance(Users user) {
+    public static synchronized Session getInstance(Users user) {
         if (instance == null) {
             instance = new Session(user);
         }
         return instance;
     }
+
     public static boolean hasSession() {
         return instance != null;
+    }
+
+    public Users getUser() {
+        return user;
+    }
+
+    public static void logout() {
+        instance = null;
+        user = null;
     }
 }

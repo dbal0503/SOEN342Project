@@ -61,8 +61,6 @@ public class BookingDAO {
                 while (rs.next()) {
                     int bookingId = rs.getInt("booking_id");
                     int offeringId = rs.getInt("offering_id");
-                    Date bookingDate = rs.getDate("booking_date");
-                    String status = rs.getString("status");
                     
                     Booking booking = new Booking(bookingId, clientId, offeringId);
                     bookings.add(booking);

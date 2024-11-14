@@ -7,7 +7,6 @@ public class Client extends Users {
     public int age;
     public Client guardian;
     private static List<Client> clients;
-
     private static final Scanner scanner = new Scanner(System.in);
 
     public Client(String name, int uniqueId, String phone_number, int age, Client guardian) {
@@ -33,14 +32,16 @@ public class Client extends Users {
     public static Client clientLogin() {
         System.out.println("Client Login");
         System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
-        String phone_number = scanner.nextLine();
-        Client client = findClient(phone_number);
+        String phoneNumber = scanner.nextLine();
+
+        Client client = ClientDOA.getClientByPhoneNumber(phoneNumber);
+
         if (client != null) {
             System.out.println("Logged in successfully");
             Session.getInstance(client);
             return client;
         } else {
-            System.out.println("Login failed");
+            System.out.println("Login failed. Client not found.");
             return null;
         }
     }
