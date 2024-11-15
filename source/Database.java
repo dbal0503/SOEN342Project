@@ -28,6 +28,17 @@ public class Database{
         if (connection != null) {
             try (Statement stmt = connection.createStatement()) {
 
+                String createLocationsTable = "CREATE TABLE IF NOT EXISTS locations (" +
+                        "id SERIAL PRIMARY KEY, " +
+                        "address TEXT NOT NULL, " +
+                        "city TEXT NOT NULL, " +
+                        "room TEXT, " +
+                        "organization TEXT" +
+                        ");";
+                stmt.executeUpdate(createLocationsTable);
+
+
+
                 String createClientsTable = "CREATE TABLE IF NOT EXISTS clients (" +
                         "uniqueid SERIAL PRIMARY KEY," +
                         "name TEXT," +
@@ -37,13 +48,19 @@ public class Database{
                 stmt.executeUpdate(createClientsTable);
 
                 String createOfferingsTable = "CREATE TABLE IF NOT EXISTS offerings (" +
-                        "id SERIAL PRIMARY KEY," +
-                        "name TEXT," +
-                        "description TEXT," +
-                        "capacity INT," +
-                        "is_group BOOLEAN," +
-                        "is_available BOOLEAN," +
-                        "instructor_id INT," +
+                        "id SERIAL PRIMARY KEY, " +
+                        "location_id INT NOT NULL, " +
+                        "starttime TEXT NOT NULL, " +
+                        "endtime TEXT NOT NULL, " +
+                        "available BOOLEAN DEFAULT TRUE, " +
+                        "isgroup BOOLEAN NOT NULL, " +
+                        "visible BOOLEAN DEFAULT FALSE, " +
+                        "capacity INT NOT NULL CHECK (capacity > 0), " +
+                        "enrolled INT DEFAULT 0 CHECK (enrolled >= 0), " +
+                        "instructor_id INT NOT NULL, " +
+                        "date TEXT NOT NULL, " +
+                        "offeringname TEXT NOT NULL, " +
+                        "FOREIGN KEY (location_id) REFERENCES locations(id), " +
                         "FOREIGN KEY (instructor_id) REFERENCES instructors(id))";
                 stmt.executeUpdate(createOfferingsTable);
 

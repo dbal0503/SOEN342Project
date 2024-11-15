@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class BookingDAO {
 
     public static void addBooking(int offeringId, int clientId) {
-        String sql = "INSERT INTO bookings (offeringid, clientid) VALUES (?, ?)";
+        String sql = "INSERT INTO bookings (offering_id, client_id) VALUES (?, ?)";
 
         try (Connection conn = Database.connecttoDB();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -46,7 +46,6 @@ public class BookingDAO {
         }
     }
 
-
     public static List<Booking> getBookingsByClient(int clientId) {
         List<Booking> bookings = new ArrayList<>();
 
@@ -59,7 +58,7 @@ public class BookingDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    int bookingId = rs.getInt("booking_id");
+                    int bookingId = rs.getInt("id");
                     int offeringId = rs.getInt("offering_id");
                     
                     Booking booking = new Booking(bookingId, clientId, offeringId);

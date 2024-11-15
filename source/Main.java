@@ -14,7 +14,7 @@ public class Main {
         System.out.println("2. Instructor Menu");
         System.out.println("3. Instructor Registration");
         System.out.println("4. View Offerings Schedule");
-        System.out.println("5. Make a booking");
+        System.out.println("5. ");
         System.out.println("6. Client Registration");
         System.out.println("7. Client Login");
         System.out.println("8: Make a Booking");
@@ -84,12 +84,7 @@ public class Main {
         Admin admin1 = new Admin("Susan", 2);
 
         menu();
-    
-        Admin.displayAdmins();
-        Location location = new Location("4549 Main St", "CityBob", "Community Center", "Room 92");
-        admin.createOffering(location, "9:00", "10:00", true, 20, "2021-10-01", "Yoga");
 
-        OfferingCatalog.printCatalog();
         
     }
 }

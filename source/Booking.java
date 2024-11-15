@@ -27,11 +27,28 @@ public class Booking {
             if (bookings.isEmpty()) {
                 System.out.println("You have no bookings.");
             } else {
+                int index = 0;
                 System.out.println("Your Bookings:");
                 for (Booking booking : bookings) {
-                    System.out.println("Booking ID: " + booking.getId());
-                    System.out.println("Offering ID: " + booking.getOfferingId());
-                    System.out.println("--------------------------");
+                    int offeringId = booking.getOfferingId();
+                    Offering offering = OfferingDAO.getOfferingDetailsById(offeringId);
+                    System.out.println("Booking #" + (index + 1) + ": Offering ID: " + booking.getOfferingId() +
+                            " - Client ID: " + booking.getId());
+                    if (offering != null) {
+                        System.out.println("Offering Name: " + offering.getOfferingName());
+                        System.out.println("Location: " + offering.getLocation());
+                        System.out.println("Date: " + offering.getDate());
+                        System.out.println("Start Time: " + offering.getStartTime());
+                        System.out.println("End Time: " + offering.getEndTime());
+                        System.out.println("Available: " + (offering.isAvailable() ? "Yes" : "No"));
+                        System.out.println("Group Offering: " + (offering.isGroup() ? "Yes" : "No"));
+                        System.out.println("Capacity: " + offering.getCapacity());
+                        System.out.println("Enrolled: " + offering.getEnrolled());
+                    } else {
+                        System.out.println("Booking #" + (index + 1) + ": Offering details not found for Offering ID: " + offeringId);
+                    }
+
+                    index++;
                 }
             }
         } else {

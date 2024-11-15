@@ -8,12 +8,17 @@ public class Location {
     private String room;
     private String organization;
 
-    public Location(String address, String city, String organization, String room) {
+    public Location(int id, String address, String city, String organization, String room) {
         this.address = address;
         this.city = new City(city);
         this.organization = organization;
         this.room = room;
+        this.id = id;
     }
+    public Location(int id){
+        this.id = id;
+    }
+
 
     public int getId() {
         return id;

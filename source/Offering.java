@@ -75,15 +75,18 @@ public class Offering {
             Schedule.removeOffering(this);
         }
     }
-    
-    // Parameterized constructor
-    public Offering(Location location, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
-        this.location = location;
+
+    public Offering(int locationId, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
+        this.location = new Location(locationId);
         this.startTime = startTime;
         this.endTime = endTime;
+        this.available = available;
         this.isGroup = isGroup;
+        this.visible = visible;
         this.capacity = capacity;
-        this.date =date;
+        this.enrolled = enrolled;
+        this.instructor = instructor;
+        this.date = date;
         this.offeringName = offeringName;
     }
 

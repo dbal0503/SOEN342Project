@@ -4,8 +4,9 @@ import java.util.List;
 
 public class OfferingDAO {
 
-    public static void addOffering(Offering offering) {
-        String sql = "INSERT INTO offerings (location_id, starttime, endtime, available, isgroup, visible, capacity, enrolled, instructor_id, date, offeringname) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static int addOffering(Offering offering) {
+        String sql = "INSERT INTO offerings (location_id, starttime, endtime, available, isgroup, visible, capacity, enrolled, instructor_id, date, offeringname) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
 
         try (Connection conn = Database.connecttoDB();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -22,12 +23,20 @@ public class OfferingDAO {
             pstmt.setString(10, offering.getDate());
             pstmt.setString(11, offering.getOfferingName());
 
-            pstmt.executeUpdate();
-            System.out.println("Offering added successfully.");
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                System.out.println("Offering added successfully with ID: " + id);
+                return id;
+            }
         } catch (SQLException e) {
             System.out.println("Error adding offering: " + e.getMessage());
         }
+        return -1;
     }
+
+
+
 
     public static List<Offering> getClientVisibleOfferings() {
         List<Offering> offerings = new ArrayList<>();
@@ -38,14 +47,14 @@ public class OfferingDAO {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                Offering offering = extractOffering(rs);
-                offerings.add(offering);
+                offerings.add(extractOffering(rs));
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving client-visible offerings: " + e.getMessage());
         }
         return offerings;
     }
+
 
     public static List<Offering> getInstructorRestrictedOfferings() {
         List<Offering> offerings = new ArrayList<>();
@@ -56,18 +65,18 @@ public class OfferingDAO {
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                Offering offering = extractOffering(rs);
-                offerings.add(offering);
+                offerings.add(extractOffering(rs));
             }
         } catch (SQLException e) {
             System.out.println("Error retrieving instructor-restricted offerings: " + e.getMessage());
         }
         return offerings;
     }
+
     private static Offering extractOffering(ResultSet rs) throws SQLException {
         Offering offering = new Offering();
         offering.setId(rs.getInt("id"));
-       // offering.setLocation(new Location(rs.getInt("location_id"))); // Assuming constructor taking ID
+        offering.setLocation(new Location(rs.getInt("location_id")));
         offering.setStartTime(rs.getString("starttime"));
         offering.setEndTime(rs.getString("endtime"));
         offering.setAvailable(rs.getBoolean("available"));
@@ -75,43 +84,49 @@ public class OfferingDAO {
         offering.setVisible(rs.getBoolean("visible"));
         offering.setCapacity(rs.getInt("capacity"));
         offering.setEnrolled(rs.getInt("enrolled"));
-      //  offering.setInstructor(new Instructor(rs.getInt("instructor_id"))); // Assuming constructor taking ID
+        offering.setInstructor(new Instructor(rs.getInt("instructor_id")));
         offering.setDate(rs.getString("date"));
         offering.setOfferingName(rs.getString("offeringname"));
         return offering;
     }
 
 
+
     public static List<Offering> getAllOfferings() {
         List<Offering> offerings = new ArrayList<>();
-        String sql = "SELECT id, location, starttime, endtime, available, isgroup, visible, capacity, enrolled, instructor, date, offeringname FROM offerings";
+        String sql = "SELECT * FROM offerings";
 
         try (Connection conn = Database.connecttoDB();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                Offering offering = new Offering();
-                offering.setId(rs.getInt("id")); // Set the unique id
-                offering.setStartTime(rs.getString("starttime"));
-                offering.setEndTime(rs.getString("endtime"));
-                offering.setAvailable(rs.getBoolean("available"));
-                offering.setGroup(rs.getBoolean("isgroup"));
-                offering.setVisible(rs.getBoolean("visible"));
-                offering.setCapacity(rs.getInt("capacity"));
-                offering.setEnrolled(rs.getInt("enrolled"));
-                offering.setDate(rs.getString("date"));
-                offering.setOfferingName(rs.getString("offeringname"));
-                //offering.setLocation(new Location(rs.getString("location")));
-                //offering.setInstructor(new Instructor(rs.getString("instructor")));
-
-                offerings.add(offering);
+                offerings.add(extractOffering(rs));
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving offerings: " + e.getMessage());
+            System.out.println("Error retrieving all offerings: " + e.getMessage());
         }
         return offerings;
     }
+
+    public static Offering getOfferingDetailsById(int offeringId) {
+        String sql = "SELECT * FROM offerings WHERE id = ?";
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, offeringId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return extractOffering(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving offering details: " + e.getMessage());
+            return null;
+        }
+    }
+
 
 
 }
