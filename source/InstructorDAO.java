@@ -25,6 +25,22 @@ public class InstructorDAO {
 
     }
 
+    public boolean isPhoneNumberExists(String phoneNumber) throws SQLException {
+        String query = "SELECT COUNT(*) FROM instructors WHERE phone_number = ?";
+        try (Connection connection = Database.connecttoDB()) {
+            assert connection != null;
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, phoneNumber);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getInt(1) > 0;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     public Instructor getInstructorbyphonenumber(String phone_number) throws SQLException{
         String selectstatement = "SELECT * FROM instructors WHERE phone_number = ?";

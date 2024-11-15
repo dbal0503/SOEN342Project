@@ -29,7 +29,10 @@ public class Instructor extends Users {
 
     private  static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
         try{
-
+            if (instructorDAO.isPhoneNumberExists(phone_number)) {
+                System.out.println("Error: Phone number already exists.");
+                return false;
+            }
             Availabilities availabilities_Instrucotor = Availabilities.parseAvailabilities(availabilities);
             Specialization specialization_Instructor = new Specialization(specialization);
 
