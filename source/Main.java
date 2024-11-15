@@ -10,71 +10,110 @@ public class Main {
         do{
         System.out.println("Choose one of the following options");
         System.out.println("0. Exit");
-        System.out.println("1. Admin Login");
-        System.out.println("2. Instructor Menu");
-        System.out.println("3. Instructor Registration");
-        System.out.println("4. View Offerings Schedule");
-        System.out.println("5. Make a booking");
-        System.out.println("6. Client Registration");
-        System.out.println("7. Client Login");
-        System.out.println("8: Make a Booking");
-        System.out.println("9: Instructor Login");
-        System.out.println("10: View Bookings");
 
-        choice = scanner.nextInt();
-        
-        switch(choice) {
-            case 1 -> {
-                System.out.println("Admin Login");
-                Admin.adminLogin();
+            if (Session.hasSession()) {
+                if (Session.user instanceof Admin) {
+                    System.out.println("1. Admin Menu");
+                } else if (Session.user instanceof Instructor) {
+                    System.out.println("2. Instructor Menu");
+                } else if (Session.user instanceof Client) {
+                    System.out.println("3. View Bookings");
+                    System.out.println("4. Make a Booking");
                 }
-            case 2 ->{ if(Instructor.instructorLogin()){
-                Instructor.instructorMenu();}
+                System.out.println("5. Logout");
+            } else {
+                System.out.println("6. Admin Login");
+                System.out.println("7. Instructor Login");
+                System.out.println("8. Instructor Registration");
+                System.out.println("9. Client Login");
+                System.out.println("10. Client Registration");
+            }
 
-            }
-            case 3 -> Instructor.instructorRegistration();
-            case 4 -> Schedule.viewPublicOfferings();
-            case 5 -> {System.out.println("Booking Interface");
-        
-            }
-            case 6 -> {
-                System.out.println("Client Registration");
-                Client.clientRegistration();
 
-            }
-            case 7 -> {
-                System.out.println("Client Login");
-                Users client = Client.clientLogin();
-                user = client;
-            }
-            case 8 -> {
-                System.out.println("Make A Booking");
-                if (Session.hasSession()) {
-                    Enrollment.enrollmentMenu((Client) Session.user);
-                } else {
-                    System.out.println("User must sign in before making a booking");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 0 -> System.out.println("Exiting");
+                case 1 -> {
+                    if (Session.hasSession() && Session.user instanceof Admin) {
+                        System.out.println("Hi");
+                    } else {
+                        System.out.println("Access denied.");
+                    }
                 }
+                case 2 -> {
+                    if (Session.hasSession() && Session.user instanceof Instructor) {
+                        Instructor.instructorMenu();
+                    } else {
+                        System.out.println("Access denied.");
+                    }
                 }
-            case 9 ->{
-                System.out.println("Instructor Login");
-                Instructor.instructorLogin();
-            }
-            case 10 ->{
-                if (Session.hasSession()) {
-                    Client clientFromSession = (Client) Session.user;
-                    Booking.viewBookings();
-                } else {
-                    System.out.println("You must log in first to view bookings.");
+                case 3 -> {
+                    if (Session.hasSession() && Session.user instanceof Client) {
+                        Booking.viewBookings();
+                    } else {
+                        System.out.println("Access denied.");
+                    }
                 }
+                case 4 -> {
+                    if (Session.hasSession() && Session.user instanceof Client) {
+                        Enrollment.enrollmentMenu((Client) Session.user);
+                    } else {
+                        System.out.println("You must log in before making a booking.");
+                    }
+                }
+                case 5 -> {
+                    if (Session.hasSession()) {
+                        Session.logout();
+                        System.out.println("Logged out successfully.");
+                    } else {
+                        System.out.println("No user logged in.");
+                    }
+                }
+                case 6 -> {
+                    if (!Session.hasSession()) {
+                        Admin.adminLogin();
+                    } else {
+                        System.out.println("You are already logged in.");
+                    }
+                }
+                case 7 -> {
+                    if (!Session.hasSession()) {
+                        if (Instructor.instructorLogin()) {
+                            System.out.println("Instructor logged in successfully.");
+                        }
+                    } else {
+                        System.out.println("You are already logged in.");
+                    }
+                }
+                case 8 -> {
+                    if (!Session.hasSession()) {
+                        Instructor.instructorRegistration();
+                    } else {
+                        System.out.println("You are already logged in.");
+                    }
+                }
+                case 9 -> {
+                    if (!Session.hasSession()) {
+                        Users client = Client.clientLogin();
+                        if (client != null) {
+                            Session.getInstance(client);
+                            System.out.println("Client logged in successfully.");
+                        }
+                    } else {
+                        System.out.println("You are already logged in.");
+                    }
+                }
+                case 10 -> {
+                    if (!Session.hasSession()) {
+                        Client.clientRegistration();
+                    } else {
+                        System.out.println("You are already logged in.");
+                    }
+                }
+                default -> System.out.println("Invalid choice.");
             }
-
-
-
-            
-            case 0 -> System.out.println("Exiting");
-            default -> System.out.println("Invalid choice");
-        }
-        } while(choice !=0);
+        } while (choice != 0);
     }
     
     public static void main(String[] args) {
