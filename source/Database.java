@@ -57,7 +57,7 @@ public class Database{
                         "visible BOOLEAN DEFAULT FALSE, " +
                         "capacity INT NOT NULL CHECK (capacity > 0), " +
                         "enrolled INT DEFAULT 0 CHECK (enrolled >= 0), " +
-                        "instructor_id INT NOT NULL, " +
+                        "instructor_id INT, " +
                         "date TEXT NOT NULL, " +
                         "offeringname TEXT NOT NULL, " +
                         "FOREIGN KEY (location_id) REFERENCES locations(id), " +
@@ -73,6 +73,16 @@ public class Database{
                         "FOREIGN KEY (client_id) REFERENCES clients(uniqueid)," +
                         "FOREIGN KEY (offering_id) REFERENCES offerings(id))";
                 stmt.executeUpdate(createBookingsTable);
+
+                String createInstructorsTable = "CREATE TABLE IF NOT EXISTS instructors (" +
+                        "id SERIAL PRIMARY KEY," +
+                        "name TEXT NOT NULL," +
+                        "phone_number TEXT UNIQUE NOT NULL," +
+                        "specialization TEXT," +
+                        "availabilities TEXT," +
+                        "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                stmt.executeUpdate(createInstructorsTable);
+
 
                 System.out.println("Tables created or verified successfully.");
 

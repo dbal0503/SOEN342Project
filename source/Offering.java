@@ -48,7 +48,11 @@ public class Offering {
     public Instructor getInstructor() {
         return instructor;
     }
-
+    public Integer getInstructorId(){
+        if (instructor==null)
+            return null;
+        return instructor.getId();
+    }
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
         setVisible(true);

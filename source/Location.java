@@ -1,4 +1,4 @@
-
+import java.util.List;
 
 public class Location {
 
@@ -57,13 +57,25 @@ public class Location {
     public void setOrganization(String organization) {
         this.organization = organization;
     }
+    public static void printAllLocations() {
+        List<Location> locations = LocationDAO.getAllLocations();
+        if (locations.isEmpty()) {
+            System.out.println("No locations available.");
+            return;
+        }
+
+        for (Location location : locations) {
+            System.out.println(location);
+        }
+    }
 
     @Override
     public String toString() {
-        return "Location{" +
-                "address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", organization='" + organization + '\'' +
-                '}';
+        return "Location Details: " +
+                "ID = " + id +
+                ", Address = '" + address + '\'' +
+                ", City = '" + city + '\'' +
+                ", Room = '" + room + '\'' +
+                ", Organization = '" + organization + '\'';
     }
 }

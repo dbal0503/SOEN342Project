@@ -19,7 +19,13 @@ public class OfferingDAO {
             pstmt.setBoolean(6, offering.isVisible());
             pstmt.setInt(7, offering.getCapacity());
             pstmt.setInt(8, offering.getEnrolled());
-            pstmt.setInt(9, offering.getInstructor().getId());
+            Integer instructorId = offering.getInstructorId();
+            if (instructorId == null) {
+                pstmt.setNull(9, Types.INTEGER);  // Set null for instructor_id
+            } else {
+                pstmt.setInt(9, instructorId);    // Set the actual instructor ID if not null
+            }
+
             pstmt.setString(10, offering.getDate());
             pstmt.setString(11, offering.getOfferingName());
 

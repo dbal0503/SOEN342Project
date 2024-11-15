@@ -36,7 +36,6 @@ public class Main {
                 case 0 -> System.out.println("Exiting");
                 case 1 -> {
                     if (Session.hasSession() && Session.user instanceof Admin) {
-                        System.out.println("Hi");
                     } else {
                         System.out.println("Access denied.");
                     }
@@ -119,16 +118,11 @@ public class Main {
     public static void main(String[] args) {
         Database.connecttoDB();
         System.out.println("------------------------------------------------------------------");
-        Admin admin = new Admin("John", 1);
-        Admin admin1 = new Admin("Susan", 2);
+        Admin a1 = new Admin("David", 0);
 
         menu();
-    
-        //Admin.displayAdmins();
-        // Location location = new Location("4549 Main St", "CityBob", "Community Center", "Room 92");
-       // admin.createOffering(location, "9:00", "10:00", true, 20, "2021-10-01", "Yoga");
 
-        OfferingCatalog.printCatalog();
+
         
     }
 }
