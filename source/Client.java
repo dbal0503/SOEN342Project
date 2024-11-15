@@ -31,20 +31,23 @@ public class Client extends Users {
 
     public static Client clientLogin() {
         System.out.println("Client Login");
-        System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
+        System.out.println("Enter your phone number in the following format XXX-XXX-XXXX: ");
         String phoneNumber = scanner.nextLine();
 
-        Client client = ClientDOA.getClientByPhoneNumber(phoneNumber);
+        String parsedPhoneNumber = Users.parsephoneNumber(phoneNumber);
+
+        Client client = ClientDOA.getClientByPhoneNumber(parsedPhoneNumber);
 
         if (client != null) {
-            System.out.println("Logged in successfully");
+            System.out.println("Logged in successfully. Welcome, " + client.name + "!");
             Session.getInstance(client);
             return client;
         } else {
-            System.out.println("Login failed. Client not found.");
+            System.out.println("Login failed. No client found with the provided phone number.");
             return null;
         }
     }
+
 
     public static Client findClient(String phone_number) {
         for (Client client : clients) {

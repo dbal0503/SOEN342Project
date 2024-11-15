@@ -26,12 +26,7 @@ public class Admin extends Users {
             System.out.println(admin.getName());
         }
     }
-    
 
- void createOffering(Location location, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
-            Offering newOffering = new Offering(location, startTime, endTime, isGroup, capacity, date, offeringName);
-            OfferingCatalog.addOffering(newOffering);
-        }
     public String getName() {
         return this.name;
     }
@@ -57,16 +52,74 @@ public static boolean findAdmin(int id) {
         System.out.println("Admin not found");
         return false;
     }
-    public static void adminLogin(){
+    public static void adminLogin() {
         scanner.nextLine();
-        System.out.println(" Please enter your id: ");
+        System.out.println("Please enter your id: ");
         int id = scanner.nextInt();
         if (findAdmin(id)) {
-            System.out.println("Logged in successfully");
-        }
-        else {
-            System.out.println("Login failed");
+            System.out.println("Logged in successfully!");
+            adminMenu();
+        } else {
+            System.out.println("Login failed. Admin not found.");
         }
     }
+
+    public static void adminMenu() {
+        int choice;
+        do {
+            System.out.println("Admin Menu:");
+            System.out.println("1. Create Offering");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                   // createAdminOffering();
+                    break;
+                case 0:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+                    break;
+            }
+        } while (choice != 0);
+    }
+
+   /* public static void createAdminOffering() {
+        scanner.nextLine();  // Consume newline
+        System.out.println("Enter the offering name: ");
+        String offeringName = scanner.nextLine();
+        System.out.println("Enter the start time (YYYY-MM-DD HH:MM:SS): ");
+        String startTime = scanner.nextLine();
+        System.out.println("Enter the end time (YYYY-MM-DD HH:MM:SS): ");
+        String endTime = scanner.nextLine();
+        System.out.println("Is this a group offering? (true/false): ");
+        boolean isGroup = scanner.nextBoolean();
+        System.out.println("Enter the capacity of the offering: ");
+        int capacity = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.println("Enter the date of the offering: ");
+        String date = scanner.nextLine();
+
+        System.out.println("Enter the location ID for this offering: ");
+        int locationId = scanner.nextInt();
+        Location location = LocationDAO.getLocationById(locationId);
+
+        if (location != null) {
+            Offering newOffering = new Offering(locationId, startTime, endTime, true, isGroup, true, capacity, 0, null, date, offeringName);
+
+            int offeringId = OfferingDAO.addOffering(newOffering);
+
+            if (offeringId != -1) {
+                System.out.println("Offering created successfully with ID: " + offeringId);
+            } else {
+                System.out.println("Error creating offering.");
+            }
+        } else {
+            System.out.println("Invalid location ID. Offering creation failed.");
+        }
+    }*/
 
 }
