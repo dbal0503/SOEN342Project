@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void menu(){
+        Database.initDatabase();
         Scanner scanner = new Scanner(System.in);
         int choice;
         Users user = null;
@@ -18,6 +19,7 @@ public class Main {
         System.out.println("7. Client Login");
         System.out.println("8: Make a Booking");
         System.out.println("9: Instructor Login");
+        System.out.println("10: View Bookings");
 
         choice = scanner.nextInt();
         
@@ -46,16 +48,26 @@ public class Main {
                 user = client;
             }
             case 8 -> {
-                System.out.println("Client Enrollment");
-                    if (Session.hasSession()){
-                        Enrollment.enrollmentMenu((Client) user);
+                System.out.println("Make A Booking");
+                if (Session.hasSession()) {
+                    Enrollment.enrollmentMenu((Client) Session.user);
+                } else {
+                    System.out.println("User must sign in before making a booking");
                 }
-                    else {System.out.println("User must sign in before making a booking");}
                 }
             case 9 ->{
                 System.out.println("Instructor Login");
                 Instructor.instructorLogin();
             }
+            case 10 ->{
+                if (Session.hasSession()) {
+                    Client clientFromSession = (Client) Session.user;
+                    Booking.viewBookings();
+                } else {
+                    System.out.println("You must log in first to view bookings.");
+                }
+            }
+
 
 
             
