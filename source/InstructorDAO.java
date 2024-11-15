@@ -4,7 +4,7 @@ import java.util.List;
 
 public class InstructorDAO {
     public int addInstructor(Instructor instructor) throws SQLException {
-        String insertsql = "INSERT INTO instructors (name, id, phone_number, specialization, availabilities) VALUES (?,?,?,?,?)";
+        String insertsql = "INSERT INTO instructors (name, phone_number, specialization, availabilities) VALUES (?,?,?,?) RETURNING id";
         try(Connection conn = Database.connecttoDB();) {
             assert conn != null;
             PreparedStatement preparedStatement = conn.prepareStatement(insertsql);
@@ -12,40 +12,19 @@ public class InstructorDAO {
             preparedStatement.setString(2, instructor.getPhoneNumber());
             preparedStatement.setString(3, instructor.getSpecialization().getName());
             preparedStatement.setString(4, instructor.getAvailabilities().getCitiesasString());
-            int rowsAffected = preparedStatement.executeUpdate();
 
-            if(rowsAffected > 0) {
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1);
-                    }
+
+            try (ResultSet rs = preparedStatement.executeQuery()) { // Use executeQuery for statements returning a result set
+                if (rs.next()) {
+                    return rs.getInt(1); // Retrieve the generated ID
+                } else {
+                    throw new SQLException("Failed to create instructor, no ID obtained.");
                 }
             }
-            throw new SQLException("Failed to create instructor, no ID obtained.");
         }
 
     }
 
-    public Instructor getInstructorbyId(int id) throws SQLException{
-        String selectstatement = "SELECT * FROM instructors WHERE id = ?";
-        try (Connection connection = Database.connecttoDB()) {
-            assert connection != null;
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectstatement)){
-                preparedStatement.setInt(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()){
-                    String name = resultSet.getString("name");
-                    String phonenumber = resultSet.getString("phonenumber");
-                    String specializationquery = resultSet.getString("specialization");
-                    String availabilitiesquery = resultSet.getString("availabilities");
-                    Specialization specialization = new Specialization(specializationquery);
-                    Availabilities availabilities = Availabilities.parseAvailabilities(availabilitiesquery);
-                    return new Instructor(name, id, phonenumber, specialization, availabilities);
-                }
-            }
-        }
-        return null;
-    }
 
     public Instructor getInstructorbyphonenumber(String phone_number) throws SQLException{
         String selectstatement = "SELECT * FROM instructors WHERE phone_number = ?";
@@ -61,7 +40,7 @@ public class InstructorDAO {
                     String availabilitiesquery = resultSet.getString("availabilities");
                     Specialization specialization = new Specialization(specializationquery);
                     Availabilities availabilities = Availabilities.parseAvailabilities(availabilitiesquery);
-                    return new Instructor(name, id, phone_number, specialization, availabilities);
+                    return new Instructor(name, phone_number, specialization, availabilities);
                 }
             }
         }
@@ -83,7 +62,7 @@ public class InstructorDAO {
                     String availabilitiesquery = resultSet.getString("availabilities");
                     Specialization specialization = new Specialization(specializationquery);
                     Availabilities availabilities = Availabilities.parseAvailabilities(availabilitiesquery);
-                    Instructor instructor= new Instructor(name, id, phonenumber, specialization, availabilities);
+                    Instructor instructor= new Instructor(name, phonenumber, specialization, availabilities);
                     instructors.add(instructor);
                 }
             }

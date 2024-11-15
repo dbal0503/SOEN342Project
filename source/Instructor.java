@@ -16,9 +16,8 @@ public class Instructor extends Users {
         }
     }
 
-    public Instructor(String name, int id, String phone_number, Specialization specialization, Availabilities availabilities) {
+    public Instructor(String name, String phone_number, Specialization specialization, Availabilities availabilities) {
         this.name = name;
-        this.uniqueId = id;
         this.phone_number = phone_number;
         this.specialization = specialization;
         this.availabilities = availabilities;
@@ -30,7 +29,7 @@ public class Instructor extends Users {
             Availabilities availabilities_Instrucotor = Availabilities.parseAvailabilities(availabilities);
             Specialization specialization_Instructor = new Specialization(specialization);
 
-            Instructor newInstructor = new Instructor(name, 0, phone_number, specialization_Instructor, availabilities_Instrucotor);
+            Instructor newInstructor = new Instructor(name, phone_number, specialization_Instructor, availabilities_Instrucotor);
 
             int generatedId = instructorDAO.addInstructor(newInstructor);
             newInstructor.setId(generatedId);
@@ -83,7 +82,6 @@ public class Instructor extends Users {
         this.availabilities = availabilities;
     }
     public static void instructorRegistration() {
-        scanner.nextLine();
         System.out.println("Instructor Registration");
         System.out.println("Enter your name: ");
         String name = scanner.nextLine();
