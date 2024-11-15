@@ -90,8 +90,6 @@ public class OfferingDAO {
         return offering;
     }
 
-
-
     public static List<Offering> getAllOfferings() {
         List<Offering> offerings = new ArrayList<>();
         String sql = "SELECT * FROM offerings";

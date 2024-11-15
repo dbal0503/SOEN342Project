@@ -56,6 +56,55 @@ public class Booking {
         }
     }
 
+    public static void deleteBookings(Client client) {
+        if (!Session.hasSession()) {
+            System.out.println("You must log in first to delete bookings.");
+            return;
+        }
+
+        viewBookings();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the number of the booking you wish to cancel, or 0 to cancel none:");
+        int bookingToCancel = scanner.nextInt();
+
+        if (bookingToCancel == 0) {
+            System.out.println("No booking was cancelled.");
+            return;
+        }
+
+        List<Booking> bookings = BookingDAO.getBookingsByClient(client.getUniqueId());
+        if (bookingToCancel < 1 || bookingToCancel > bookings.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        Booking bookingToDelete = bookings.get(bookingToCancel - 1);
+        int bookingId = bookingToDelete.getId();
+
+        if (client.getAge() < 18) {
+            System.out.println("Confirm guardian is present to proceed with cancellation? (yes/no): ");
+            scanner.nextLine();
+            String guardianApproval = scanner.nextLine();
+
+            if (!guardianApproval.equalsIgnoreCase("yes")) {
+                System.out.println("Booking cancellation aborted.");
+                return;
+            }
+        }
+        
+        boolean success = BookingDAO.deleteBooking(bookingId);
+        if (success) {
+            System.out.println("Booking cancelled successfully.");
+        } else {
+            System.out.println("Failed to cancel booking.");
+        }
+    }
+
+
+
+
+
 
     public Client getClient() {
         return client;

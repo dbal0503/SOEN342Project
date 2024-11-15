@@ -13,8 +13,6 @@ public class Main {
         System.out.println("1. Admin Login");
         System.out.println("2. Instructor Menu");
         System.out.println("3. Instructor Registration");
-        System.out.println("4. View Offerings Schedule");
-        System.out.println("5. ");
         System.out.println("6. Client Registration");
         System.out.println("7. Client Login");
         System.out.println("8: Make a Booking");
@@ -67,6 +65,16 @@ public class Main {
                     System.out.println("You must log in first to view bookings.");
                 }
             }
+            case 11 ->{
+                if (Session.hasSession()) {
+                    Client clientFromSession = (Client) Session.user;
+                    Booking.deleteBookings(clientFromSession);
+                } else {
+                    System.out.println("You must log in first to view bookings.");
+                }
+
+            }
+
 
 
 
@@ -82,9 +90,6 @@ public class Main {
         System.out.println("------------------------------------------------------------------");
         Admin admin = new Admin("John", 1);
         Admin admin1 = new Admin("Susan", 2);
-
         menu();
-
-        
     }
 }

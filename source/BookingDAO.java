@@ -96,7 +96,7 @@ public class BookingDAO {
             return false;
         }
     }
-    private static boolean deleteBooking(int bookingId) {
+    public static boolean deleteBooking(int bookingId) {
         String deleteQuery = "DELETE FROM bookings WHERE id = ?";
         try (Connection connection = Database.connecttoDB();
              PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
@@ -116,6 +116,30 @@ public class BookingDAO {
             System.err.println("Error deleting booking: " + e.getMessage());
             return false;
         }
+    }
+    public static List<Booking> getAllBookings() {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM bookings";
+
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int offeringId = rs.getInt("offering_id");
+                int clientId = rs.getInt("client_id");
+
+                Booking booking = new Booking(id, offeringId, clientId);
+                bookings.add(booking);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving bookings: " + e.getMessage());
+        }
+
+        return bookings;
     }
 
 }
