@@ -1,9 +1,7 @@
 import java.sql.*;
-import java.util.Scanner;
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.SQLException;
-public class ClientDOA {
+public class ClientDAO {
 
     public static Integer insertClient(String name, String phoneNumber, int age, Integer guardianId) {
         String sql = "INSERT INTO clients (name, phonenumber, age, guardianid) VALUES (?, ?, ?, ?) RETURNING uniqueid";
@@ -138,7 +136,7 @@ public class ClientDOA {
                     String name = rs.getString("name");
                     int age = rs.getInt("age");
                     int guardianId = rs.getInt("guardianid");
-                    Client guardian = guardianId > 0 ? ClientDOA.getClientById(guardianId) : null;
+                    Client guardian = guardianId > 0 ? ClientDAO.getClientById(guardianId) : null;
 
                     return new Client(name, uniqueId, phoneNumber, age, guardian);
                 }

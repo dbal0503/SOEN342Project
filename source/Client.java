@@ -1,5 +1,4 @@
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,7 +35,7 @@ public class Client extends Users {
 
         String parsedPhoneNumber = Users.parsephoneNumber(phoneNumber);
 
-        Client client = ClientDOA.getClientByPhoneNumber(parsedPhoneNumber);
+        Client client = ClientDAO.getClientByPhoneNumber(parsedPhoneNumber);
 
         if (client != null) {
             System.out.println("Logged in successfully. Welcome, " + client.name + "!");
@@ -72,7 +71,7 @@ public class Client extends Users {
 
         String phoneNumber = Users.parsephoneNumber(phone_number);
 
-        if (ClientDOA.getClientByPhoneNumber(phoneNumber) != null) {
+        if (ClientDAO.getClientByPhoneNumber(phoneNumber) != null) {
             System.out.println("A client with this phone number already exists.");
             return;
         }
@@ -90,10 +89,10 @@ public class Client extends Users {
             String guardianPhoneC = Users.parsephoneNumber(guardianPhone);
 
             // Check if the guardian already exists
-            Client guardian = ClientDOA.getClientByPhoneNumber(guardianPhoneC);
+            Client guardian = ClientDAO.getClientByPhoneNumber(guardianPhoneC);
             if (guardian == null) {
                 // Insert guardian into database and get the uniqueId
-                guardianId = ClientDOA.insertClient(guardianName, guardianPhoneC, guardianAge, null);
+                guardianId = ClientDAO.insertClient(guardianName, guardianPhoneC, guardianAge, null);
                 if (guardianId == null) {
                     System.out.println("Failed to register guardian.");
                     return;
@@ -101,7 +100,7 @@ public class Client extends Users {
             }
         }
 
-            Integer clientIdDB = ClientDOA.insertClient(name, phoneNumber, age, guardianId);
+            Integer clientIdDB = ClientDAO.insertClient(name, phoneNumber, age, guardianId);
             if (clientIdDB != null) {
                 System.out.println("Client registered successfully with ID: " + clientIdDB);
             } else {
