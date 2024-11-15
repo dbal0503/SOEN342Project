@@ -92,7 +92,7 @@ public class Booking {
                 return;
             }
         }
-        
+
         boolean success = BookingDAO.deleteBooking(bookingId);
         if (success) {
             System.out.println("Booking cancelled successfully.");

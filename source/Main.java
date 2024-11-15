@@ -19,6 +19,8 @@ public class Main {
                 } else if (Session.user instanceof Client) {
                     System.out.println("3. View Bookings");
                     System.out.println("4. Make a Booking");
+                    System.out.println("11. Delete a Booking");
+
                 }
                 System.out.println("5. Logout");
             } else {
@@ -106,6 +108,13 @@ public class Main {
                 case 10 -> {
                     if (!Session.hasSession()) {
                         Client.clientRegistration();
+                    } else {
+                        System.out.println("You are already logged in.");
+                    }
+                }
+                case 11 ->{
+                    if (!Session.hasSession() && Session.user instanceof Client) {
+                        Booking.deleteBookings((Client) Session.user);
                     } else {
                         System.out.println("You are already logged in.");
                     }

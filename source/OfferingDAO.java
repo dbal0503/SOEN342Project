@@ -43,7 +43,7 @@ public class OfferingDAO {
 
 
 
-
+        //method for schedule
     public static List<Offering> getClientVisibleOfferings() {
         List<Offering> offerings = new ArrayList<>();
         String sql = "SELECT * FROM offerings WHERE visible = TRUE";
