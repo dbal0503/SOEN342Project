@@ -166,6 +166,7 @@ public class Offering {
 @Override
 public String toString() {
     return "Offering Details:\n" +
+            "Id: " + id + "\n" +
             "Location: " + location + "\n" +
             "Start Time: " + startTime + "\n" +
             "End Time: " + endTime + "\n" +
