@@ -120,8 +120,6 @@ public class BookingDAO {
 
 
     public static boolean hasBookingConflict(int offeringId, int clientId) {
-                    //True = Conflict, False = No Conflict
-
         String offeringQuery = "SELECT starttime, endtime, date FROM offerings WHERE id = ?";
         try (Connection conn = Database.connecttoDB();
              PreparedStatement offeringStmt = conn.prepareStatement(offeringQuery)) {
@@ -135,36 +133,35 @@ public class BookingDAO {
                 String newDate = newOfferingRs.getString("date").trim();
 
                 List<Booking> clientBookings = getBookingsByClient(clientId);
+
                 for (Booking booking : clientBookings) {
                     try (PreparedStatement existingOfferingStmt = conn.prepareStatement(offeringQuery)) {
                         existingOfferingStmt.setInt(1, booking.getOfferingId());
+
                         try (ResultSet existingOfferingRs = existingOfferingStmt.executeQuery()) {
                             if (existingOfferingRs.next()) {
-                                String existingStartTime = existingOfferingRs.getString("starttime");
-                                String existingEndTime = existingOfferingRs.getString("endtime");
-                                String existingDate = existingOfferingRs.getString("date");
+                                String existingStartTime = existingOfferingRs.getString("starttime").trim();
+                                String existingEndTime = existingOfferingRs.getString("endtime").trim();
+                                String existingDate = existingOfferingRs.getString("date").trim();
 
-                                // If time and dates are equal = conflict
+                                // If times and date match, it's a conflict
                                 if (newStartTime.equals(existingStartTime) &&
                                         newEndTime.equals(existingEndTime) &&
                                         newDate.equals(existingDate)) {
-                                    return true;
-                                } else {
-                                    return false;
+                                    return true; // Conflict found
                                 }
                             }
                         }
                     }
                 }
-            } else {
-                return false;
             }
         } catch (SQLException e) {
             System.out.println("Error checking booking conflicts: " + e.getMessage());
         }
-        //False = no conflict
-        return false;
+
+        return false; // No conflict found after checking all bookings
     }
+
 
     public static List<Booking> getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
