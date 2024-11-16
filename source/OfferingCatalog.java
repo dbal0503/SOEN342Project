@@ -23,13 +23,5 @@ public class OfferingCatalog {
         return offerings;
     }
 
-    public static void removeOffering(Offering offering) {
-        offeringCatalog.remove(offering);
-    }
 
-    public static void printCatalog() {
-        for (Offering offering : offeringCatalog) {
-            System.out.println(offering);
-        }
-    }
 }   

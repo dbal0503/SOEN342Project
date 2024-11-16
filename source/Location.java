@@ -15,6 +15,12 @@ public class Location {
         this.city = new City(city);
         this.id = id;
     }
+    public Location(Location location) {
+        this.address = location.getAddress();
+        this.city = location.getCity();
+        this.id = location.getId();
+        this.organization = location.getOrganization();
+    }
     public Location(int id){
         this.id = id;
     }
@@ -64,8 +70,11 @@ public class Location {
 
     @Override
     public String toString() {
-        return "Location Details: " +
-                "ID = " + id +
-                '\'';
+        return "Location{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", city=" + city +
+
+                '}';
     }
 }

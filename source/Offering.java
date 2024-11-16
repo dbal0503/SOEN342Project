@@ -61,26 +61,6 @@ public class Offering {
         offeringDAO.assignInstructorToOffering(this.id, instructor.uniqueId);
     }
 
-    public void enrollClient(Client client) {
-        if (isGroup && enrolled < capacity) {
-            enrolledClients.add(client);
-            enrolled++;
-            //Booking booking = new Booking(client, this);
-           // bookings.add(booking);
-
-            if(enrolled == capacity){
-                Schedule.removeOffering(this);
-            }
-        }
-        else if (!isGroup) {
-            enrolledClients.add(client);
-            enrolled++;
-            //Booking booking = new Booking(client, this);
-           // bookings.add(booking);
-            setAvailable(false);
-            Schedule.removeOffering(this);
-        }
-    }
     public static void printOfferingList(List<Offering> offeringList) {
         for (Offering offering : offeringList) {
             System.out.println(offering.toString());
