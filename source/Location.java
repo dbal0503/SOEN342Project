@@ -66,8 +66,6 @@ public class Location {
     public String toString() {
         return "Location Details: " +
                 "ID = " + id +
-                ", Address = '" + address + '\'' +
-                ", City = '" + city + '\'' +
                 '\'';
     }
 }

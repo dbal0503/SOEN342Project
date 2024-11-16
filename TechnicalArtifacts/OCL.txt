@@ -1,0 +1,15 @@
+1)
+context Offering
+inv: self.offeringCatalog.offering->select(o: Offering | o <> self 
+and o.starttime = self.starttime and o.endtime = endtime and o.date = self.date and o.location = self.location)->size() = 0
+
+2)
+context Client
+inv: self.age < 18 implies self.guardian->notEmpty()
+
+3)
+context Offering
+inv: self.instructor.Availabilities->exists(a: Availabilities | a.city = self.location.city)
+
+4) context Booking
+inv: self.client.booking ->forAll(b: Booking | b <> self implies (b.date <> self.date and b.startTime <> self.startTime and b.endTime <> self.endTime))
