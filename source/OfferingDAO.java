@@ -4,12 +4,36 @@ import java.util.Collections;
 import java.util.List;
 
 public class OfferingDAO {
+
+    public static List<Offering> getOfferingsByInstructorId(int instructorId) {
+        List<Offering> offerings = new ArrayList<>();
+        String sql = "SELECT o.* FROM offerings o " +
+                "JOIN instructors i ON o.instructor_id = i.id " + // Join offerings to instructors
+                "WHERE i.id = ?"; // Match the instructor_id
+
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, instructorId); // Set the instructor ID in the query
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    offerings.add(extractOffering(rs)); // Extract the offering details
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving offerings by instructor ID: " + e.getMessage());
+        }
+
+        return offerings;
+    }
     public static List<Offering> getOfferingsByInstructorCity(int instructorId) {
         List<Offering> offerings = new ArrayList<>();
         String sql = "SELECT o.* FROM offerings o " +
                 "JOIN locations l ON o.location_id = l.id " + // Join offerings to locations
                 "JOIN instructor_cities ic ON ic.city_id = l.city_id " + // Join instructor_cities to locations via city_id
-                "WHERE ic.instructor_id = ?"; // Match the instructor_id with the city_id
+                "WHERE ic.instructor_id = ? " + // Match the instructor_id with the city_id
+                "AND o.instructor_id IS NULL";
 
         try (Connection conn = Database.connecttoDB();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -141,9 +165,9 @@ public class OfferingDAO {
         List<Offering> offerings = new ArrayList<>();
         String sql = "SELECT * FROM offerings o " +
                 "JOIN locations l ON o.location_id = l.id " +
-                "WHERE LOWER(l.city) IN (%s)"; // Use LOWER for case-insensitive comparison
+                "WHERE LOWER(l.city) IN (%s)";
 
-        // Split the instructorCities string into an array of city names
+
         String[] citiesArray = instructorCities.split(",");
 
         // Trim and normalize all cities to lowercase for comparison
@@ -196,6 +220,19 @@ public class OfferingDAO {
             return null;
         }
     }
+    public boolean assignInstructorToOffering(int offeringId, int instructorId) {
+        String sql = "UPDATE offerings SET instructor_id = ? WHERE id = ?";
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, instructorId);
+            pstmt.setInt(2, offeringId);
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.out.println("Error assigning instructor to offering: " + e.getMessage());
+        }
+        return false;
+    }
 
     public static boolean offeringAlreadyExists(Offering offering) {
         String sql = "SELECT * FROM offerings o " +
@@ -213,15 +250,18 @@ public class OfferingDAO {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    //already exist
+
                     return true;
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error checking for existing offering: " + e.getMessage());
         }
-        return false; // not exist
+
+        return false;
     }
+
+
 
 
 

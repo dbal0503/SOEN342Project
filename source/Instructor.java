@@ -147,7 +147,7 @@ public class Instructor extends Users {
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> {System.out.println("Viewing your offerings");
-                    List<Offering> offerings = OfferingCatalog.getOfferings((Instructor)Session.user);
+                    List<Offering> offerings = OfferingDAO.getOfferingsByInstructorId(((Instructor)Session.user).uniqueId);
                     for (Offering offering : offerings) {
                         System.out.print("ID: " + offerings.indexOf(offering) + " ");
                         System.out.println(offering);
@@ -155,11 +155,17 @@ public class Instructor extends Users {
                     }
                 }
                 case 2 -> {
-                    Offering.printOfferingList(OfferingDAO.getOfferingsByInstructorCity(((Instructor)Session.user).uniqueId));
+                    List<Offering> offerings = OfferingDAO.getOfferingsByInstructorCity(((Instructor)Session.user).uniqueId);
+                    if (offerings.isEmpty()) {
+                        System.out.println("No offerings found");
+                        break;
+                    }
+                    Offering.printOfferingList(offerings);
                     System.out.println("Enter the id of the offering you would like to accept: ");
                     int id = scanner.nextInt();
-                    Offering offering = OfferingCatalog.getOfferings().get(id);
-                    offering.setInstructor((Instructor)Session.user);
+                    Offering offering = OfferingDAO.getOfferingDetailsById(id);
+                    assert offering != null;
+                    offering.assignInstructor((Instructor)Session.user);
 
                 }
 

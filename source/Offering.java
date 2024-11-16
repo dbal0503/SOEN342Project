@@ -16,6 +16,7 @@ public class Offering {
     private String date;
     private String offeringName;
     private List<Client> enrolledClients = new ArrayList<>();
+    private OfferingDAO offeringDAO = new OfferingDAO();
 
     private List<Booking> bookings = new ArrayList<>();
 
@@ -56,6 +57,10 @@ public class Offering {
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
     }
+    public void assignInstructor(Instructor instructor) {
+        offeringDAO.assignInstructorToOffering(this.id, instructor.uniqueId);
+    }
+
     public void enrollClient(Client client) {
         if (isGroup && enrolled < capacity) {
             enrolledClients.add(client);
