@@ -14,7 +14,7 @@ public class OfferingCatalog {
         public static List<Offering> getOfferings(Instructor instructor) {
         List<Offering> offerings = new ArrayList<>();
         for (Offering offering : OfferingCatalog.getOfferings()) {
-            for (City city : instructor.availabilities.cities) {
+            for (City city : instructor.availabilities.getCities()) {
                 if ((offering.getLocation().getCity().getName()).equals(city.getName())) {
                     offerings.add(offering);
                 }

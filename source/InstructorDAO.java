@@ -1,29 +1,45 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class InstructorDAO {
-    public int addInstructor(Instructor instructor) throws SQLException {
-        String insertsql = "INSERT INTO instructors (name, phone_number, specialization, availabilities) VALUES (?,?,?,?) RETURNING id";
-        try(Connection conn = Database.connecttoDB();) {
-            assert conn != null;
-            PreparedStatement preparedStatement = conn.prepareStatement(insertsql);
-            preparedStatement.setString(1, instructor.getName());
-            preparedStatement.setString(2, instructor.getPhoneNumber());
-            preparedStatement.setString(3, instructor.getSpecialization().getName());
-            preparedStatement.setString(4, instructor.getAvailabilities().getCitiesasString());
 
+    public Instructor getInstructorByPhoneNumber(String phone_number) throws SQLException {
+        String selectStatement = "SELECT * FROM instructors WHERE phone_number = ?";
+        try (Connection connection = Database.connecttoDB()) {
+            assert connection != null;
+            try (PreparedStatement preparedStatement = connection.prepareStatement(selectStatement)) {
+                preparedStatement.setString(1, phone_number);
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-            try (ResultSet rs = preparedStatement.executeQuery()) { // Use executeQuery for statements returning a result set
-                if (rs.next()) {
-                    return rs.getInt(1); // Retrieve the generated ID
-                } else {
-                    throw new SQLException("Failed to create instructor, no ID obtained.");
+                if (resultSet.next()) {
+                    // Get basic instructor info
+                    String name = resultSet.getString("name");
+                    int id = resultSet.getInt("id");
+                    String specializationName = resultSet.getString("specialization");
+
+                    // Create specialization object
+                    Specialization specialization = new Specialization(specializationName);
+
+                    List<City> instructorCities = getInstructorCities(id);
+
+                    // Create availabilities object with the cities
+                    Availabilities availabilities = new Availabilities(instructorCities);
+
+                    // Create and return the instructor object
+                    Instructor instructor = new Instructor(name, phone_number, specialization, availabilities);
+                    instructor.setId(id);
+                    return instructor;
                 }
             }
         }
-
+        return null;
     }
+
 
     public boolean isPhoneNumberExists(String phoneNumber) throws SQLException {
         String query = "SELECT COUNT(*) FROM instructors WHERE phone_number = ?";
@@ -40,87 +56,61 @@ public class InstructorDAO {
         }
         return false;
     }
+    // Add instructor cities
+    private void addInstructorCities(Connection conn, int instructorId, List<City> cities) throws SQLException {
+        String insertSql = "INSERT INTO instructor_cities (instructor_id, city_id) VALUES (?, ?)";
+             PreparedStatement stmt = conn.prepareStatement(insertSql);
 
+            for (City city : cities) {
+                CityDAO cityDAO = new CityDAO();
+                int cityId = cityDAO.getCityIdByName(city.getName());
+                if (cityId != -1) {
+                    stmt.setInt(1, instructorId);
+                    stmt.setInt(2, cityId);
+                    stmt.executeUpdate();
 
-    public Instructor getInstructorbyphonenumber(String phone_number) throws SQLException{
-        String selectstatement = "SELECT * FROM instructors WHERE phone_number = ?";
-        try (Connection connection = Database.connecttoDB()) {
-            assert connection != null;
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectstatement)){
-                preparedStatement.setString(1, phone_number);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()){
-                    String name = resultSet.getString("name");
-                    int id = resultSet.getInt("id");
-                    String specializationquery = resultSet.getString("specialization");
-                    String availabilitiesquery = resultSet.getString("availabilities");
-                    Specialization specialization = new Specialization(specializationquery);
-                    Availabilities availabilities = Availabilities.parseAvailabilities(availabilitiesquery);
-                    return new Instructor(name, phone_number, specialization, availabilities);
-                }
             }
         }
-        return null;
     }
-    public List<Instructor> getAllInstructor() throws SQLException{
-        String selectstatement = "SELECT * FROM instructors";
-        List<Instructor> instructors = new ArrayList<>();
 
-        try(Connection connection = Database.connecttoDB()) {
-            assert connection != null;
-            try (PreparedStatement preparedStatement = connection.prepareStatement(selectstatement)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while(resultSet.next()){
-                    int id = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
-                    String phonenumber = resultSet.getString("phonenumber");
-                    String specializationquery = resultSet.getString("specialization");
-                    String availabilitiesquery = resultSet.getString("availabilities");
-                    Specialization specialization = new Specialization(specializationquery);
-                    Availabilities availabilities = Availabilities.parseAvailabilities(availabilitiesquery);
-                    Instructor instructor= new Instructor(name, phonenumber, specialization, availabilities);
-                    instructors.add(instructor);
-                }
+    // Get instructor cities
+    private List<City> getInstructorCities(int instructorId) throws SQLException {
+        String query = "SELECT c.name FROM cities c " +
+                "JOIN instructor_cities ic ON c.id = ic.city_id " +
+                "WHERE ic.instructor_id = ?";
+        List<City> cities = new ArrayList<>();
+
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, instructorId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                cities.add(new City(rs.getString("name")));
             }
-            return instructors;
         }
-        catch (SQLException e){
-            e.printStackTrace();
-            return null;
-        }
-
+        return cities;
     }
-    public boolean updateInstructor(Instructor instructor) throws SQLException {
-        String insertsql = "UPDATE instructors SET name = ?, phone_number = ?, specialization = ?, availabilities = ?, WHERE id =?";
-        try(Connection conn = Database.connecttoDB();) {
+
+    public int addInstructor(Instructor instructor) throws SQLException {
+        String insertSql = "INSERT INTO instructors (name, phone_number, specialization) VALUES (?,?,?) RETURNING id";
+        try (Connection conn = Database.connecttoDB()) {
             assert conn != null;
-            PreparedStatement preparedStatement = conn.prepareStatement(insertsql);
+            PreparedStatement preparedStatement = conn.prepareStatement(insertSql);
             preparedStatement.setString(1, instructor.getName());
             preparedStatement.setString(2, instructor.getPhoneNumber());
             preparedStatement.setString(3, instructor.getSpecialization().getName());
-            preparedStatement.setString(4, instructor.getAvailabilities().getCitiesasString());
-            preparedStatement.setInt(5, instructor.getId());
-            int rowsAffected = preparedStatement.executeUpdate();
-            return rowsAffected>0;
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
 
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    int instructorId = rs.getInt(1);
+                    addInstructorCities(conn, instructorId, instructor.getAvailabilities().getCities());
+                    return instructorId;
+                } else {
+                    throw new SQLException("Failed to create instructor, no ID obtained.");
+                }
+            }
+        }
     }
 
-    public boolean deleteInstructor(int id) throws SQLException{
-        String deletestatement = "DELETE FROM instructors WHERE id =?";
-        try(Connection connection = Database.connecttoDB()){
-            assert connection != null;
-            PreparedStatement preparedStatement= connection.prepareStatement(deletestatement);
-            preparedStatement.setInt(1, id);
-            int rowsAffected = preparedStatement.executeUpdate();
-            return rowsAffected >0;
-        } catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

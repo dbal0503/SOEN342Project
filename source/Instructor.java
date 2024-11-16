@@ -27,22 +27,33 @@ public class Instructor extends Users {
     }
 
 
-    private  static boolean registerInstructor(String name, String phone_number, String specialization, String availabilities) {
-        try{
+    private static boolean registerInstructor(String name, String phone_number, String specialization, String citiesInput) {
+        try {
             if (instructorDAO.isPhoneNumberExists(phone_number)) {
                 System.out.println("Error: Phone number already exists.");
                 return false;
             }
-            Availabilities availabilities_Instrucotor = Availabilities.parseAvailabilities(availabilities);
+
+
+            List<City> cities = new ArrayList<>();
+            String[] cityNames = citiesInput.split(",");
+            for (String cityName : cityNames) {
+                cities.add(new City(cityName.trim()));
+            }
+
+            // Create availabilities with the list of cities
+            Availabilities availabilities = new Availabilities(cities);
             Specialization specialization_Instructor = new Specialization(specialization);
 
-            Instructor newInstructor = new Instructor(name, phone_number, specialization_Instructor, availabilities_Instrucotor);
+            Instructor newInstructor = new Instructor(name, phone_number, specialization_Instructor, availabilities);
 
             int generatedId = instructorDAO.addInstructor(newInstructor);
             newInstructor.setId(generatedId);
             return generatedId > 0;
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error during instructor registration: " + e.getMessage());
+            return false;
         }
     }
 
@@ -50,13 +61,7 @@ public class Instructor extends Users {
         return this.name;
     }
 
-    public static List<Instructor> getInstructors() {
-        try {
-            return instructorDAO.getAllInstructor();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 
     public void setName(String name) {
@@ -96,7 +101,12 @@ public class Instructor extends Users {
         String phone_number = scanner.nextLine();
         System.out.println("Enter your specialization: ");
         String specialization = scanner.nextLine();
-        System.out.println("Enter the city or cities you are available to work in delimited by comas: ");
+        try{
+        City.getAllCities();}
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Enter the name of the city or cities you are available to work from delimited by comas");
         String cities = scanner.nextLine();
         if (registerInstructor(name, phone_number, specialization, cities)) {
             System.out.println("Instructor registered successfully");
@@ -106,24 +116,28 @@ public class Instructor extends Users {
         }
     }
 
+
     public static Instructor findInstructor(String phone_number) {
         try{
-            return instructorDAO.getInstructorbyphonenumber(phone_number);
+            return instructorDAO.getInstructorByPhoneNumber(phone_number);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     public static boolean instructorLogin() {
-        System.out.println("instructor Login");
+        System.out.println("Instructor Login");
         System.out.println("Enter your phone number in the following format xxx-xxx-xxxx: ");
         String phone_number = scanner.nextLine();
         Instructor instructor = findInstructor(phone_number);
+        if (instructor == null) {
+            System.out.println("Invalid Phone Number");
+            return false; }
         System.out.println("Logged in successfully");
         Session.getInstance(instructor);
         return true;
     }
 
-    public static void instructorMenu() {
+    public static void instructorMenu() throws SQLException {
         int choice;
         do {
             System.out.println("Choose one of the following options");
@@ -141,6 +155,7 @@ public class Instructor extends Users {
                     }
                 }
                 case 2 -> {
+                    Offering.printOfferingList(OfferingDAO.getOfferingsByInstructorCity(((Instructor)Session.user).uniqueId));
                     System.out.println("Enter the id of the offering you would like to accept: ");
                     int id = scanner.nextInt();
                     Offering offering = OfferingCatalog.getOfferings().get(id);

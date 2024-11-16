@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
@@ -42,7 +43,9 @@ public class Main {
                 }
                 case 2 -> {
                     if (Session.hasSession() && Session.user instanceof Instructor) {
-                        Instructor.instructorMenu();
+                        try{
+                        Instructor.instructorMenu();}
+                        catch(SQLException e){e.printStackTrace();}
                     } else {
                         System.out.println("Access denied.");
                     }

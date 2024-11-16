@@ -55,9 +55,6 @@ public class Offering {
     }
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
-        setVisible(true);
-        OfferingCatalog.removeOffering(this);
-        Schedule.addOffering(this);
     }
     public void enrollClient(Client client) {
         if (isGroup && enrolled < capacity) {
@@ -79,7 +76,12 @@ public class Offering {
             Schedule.removeOffering(this);
         }
     }
+    public static void printOfferingList(List<Offering> offeringList) {
+        for (Offering offering : offeringList) {
+            System.out.println(offering.toString());
 
+        }
+    }
     public Offering(int locationId, String startTime, String endTime, boolean isGroup, int capacity, String date, String offeringName) {
         this.location = new Location(locationId);
         this.startTime = startTime;
@@ -170,7 +172,11 @@ public class Offering {
     public void cancel() {
         available = false;
     }
-
+    public static void printCatalog(List<Offering> offerings) {
+        for (Offering offering : offerings) {
+            System.out.println(offering);
+        }
+    }
 
 @Override
 public String toString() {

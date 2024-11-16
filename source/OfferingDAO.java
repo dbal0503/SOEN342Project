@@ -1,8 +1,33 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OfferingDAO {
+    public static List<Offering> getOfferingsByInstructorCity(int instructorId) {
+        List<Offering> offerings = new ArrayList<>();
+        String sql = "SELECT o.* FROM offerings o " +
+                "JOIN locations l ON o.location_id = l.id " + // Join offerings to locations
+                "JOIN instructor_cities ic ON ic.city_id = l.city_id " + // Join instructor_cities to locations via city_id
+                "WHERE ic.instructor_id = ?"; // Match the instructor_id with the city_id
+
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, instructorId); // Set the instructor ID in the query
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    offerings.add(extractOffering(rs)); // Extract the offering details
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving offerings by instructor's city: " + e.getMessage());
+        }
+
+        return offerings;
+    }
+
 
     public static int addOffering(Offering offering) {
         String sql = "INSERT INTO offerings (location_id, starttime, endtime, available, isgroup, visible, capacity, enrolled, instructor_id, date, offeringname) " +
@@ -112,6 +137,47 @@ public class OfferingDAO {
         }
         return offerings;
     }
+    public static List<Offering> getAllOfferingsByInstructorCities(String instructorCities) {
+        List<Offering> offerings = new ArrayList<>();
+        String sql = "SELECT * FROM offerings o " +
+                "JOIN locations l ON o.location_id = l.id " +
+                "WHERE LOWER(l.city) IN (%s)"; // Use LOWER for case-insensitive comparison
+
+        // Split the instructorCities string into an array of city names
+        String[] citiesArray = instructorCities.split(",");
+
+        // Trim and normalize all cities to lowercase for comparison
+        for (int i = 0; i < citiesArray.length; i++) {
+            citiesArray[i] = citiesArray[i].trim().toLowerCase();
+        }
+
+        // Prepare placeholders for the number of cities
+        String citiesPlaceholder = String.join(",", Collections.nCopies(citiesArray.length, "?"));
+
+        // Format the SQL query to include the placeholders
+        sql = String.format(sql, citiesPlaceholder);
+
+        try (Connection conn = Database.connecttoDB()) {
+            assert conn != null;
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                // Set the cities in the prepared statement
+                for (int i = 0; i < citiesArray.length; i++) {
+                    pstmt.setString(i + 1, citiesArray[i]);
+                }
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    offerings.add(extractOffering(rs)); // Assuming extractOffering is defined to convert ResultSet to Offering
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving offerings by instructor cities: " + e.getMessage());
+        }
+
+        return offerings;
+    }
+
 
     public static Offering getOfferingDetailsById(int offeringId) {
         String sql = "SELECT * FROM offerings WHERE id = ?";

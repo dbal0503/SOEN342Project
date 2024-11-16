@@ -27,15 +27,26 @@ public class Database{
 
         if (connection != null) {
             try (Statement stmt = connection.createStatement()) {
+                String createCityTable = "CREATE TABLE IF NOT EXISTS cities (" +
+                        "id SERIAL PRIMARY KEY, " +
+                        "name TEXT NOT NULL)";
+                stmt.executeUpdate(createCityTable);
 
                 String createLocationsTable = "CREATE TABLE IF NOT EXISTS locations (" +
-                        "id SERIAL PRIMARY KEY, " +
-                        "address TEXT NOT NULL, " +
-                        "city TEXT NOT NULL, " +
-                        "room TEXT, " +
-                        "organization TEXT" +
-                        ");";
+                        "id SERIAL PRIMARY KEY," +
+                        "name TEXT NOT NULL," +
+                        "city_id INT NOT NULL," +
+                        "address TEXT NOT NULL," +
+                        "FOREIGN KEY (city_id) REFERENCES cities(id))";
                 stmt.executeUpdate(createLocationsTable);
+
+                String createInstructorsTable = "CREATE TABLE IF NOT EXISTS instructors (" +
+                        "id SERIAL PRIMARY KEY," +
+                        "name TEXT NOT NULL," +
+                        "phone_number TEXT UNIQUE NOT NULL," +
+                        "specialization TEXT," +
+                        "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                stmt.executeUpdate(createInstructorsTable);
 
 
 
@@ -46,6 +57,8 @@ public class Database{
                         "age INT," +
                         "guardianid INT)";
                 stmt.executeUpdate(createClientsTable);
+
+
 
                 String createOfferingsTable = "CREATE TABLE IF NOT EXISTS offerings (" +
                         "id SERIAL PRIMARY KEY, " +
@@ -74,14 +87,18 @@ public class Database{
                         "FOREIGN KEY (offering_id) REFERENCES offerings(id))";
                 stmt.executeUpdate(createBookingsTable);
 
-                String createInstructorsTable = "CREATE TABLE IF NOT EXISTS instructors (" +
-                        "id SERIAL PRIMARY KEY," +
-                        "name TEXT NOT NULL," +
-                        "phone_number TEXT UNIQUE NOT NULL," +
-                        "specialization TEXT," +
-                        "availabilities TEXT," +
-                        "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
-                stmt.executeUpdate(createInstructorsTable);
+
+
+                String createInstructorCitiesTable = "CREATE TABLE IF NOT EXISTS instructor_cities (" +
+                        "instructor_id INT," +
+                        "city_id INT," +
+                        "PRIMARY KEY (instructor_id, city_id)," +
+                        "FOREIGN KEY (instructor_id) REFERENCES instructors(id)," +
+                        "FOREIGN KEY (city_id) REFERENCES cities(id))";
+                stmt.executeUpdate(createInstructorCitiesTable);
+
+
+
 
 
                 System.out.println("Tables created or verified successfully.");
