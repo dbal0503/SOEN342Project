@@ -1,6 +1,6 @@
 1)
 context Offering
-inv: self.offeringCatalog.offering->select(o: Offering | o <> self 
+inv: self.offeringCatalog.offering->select(o: Offering | o <> self
 and o.starttime = self.starttime and o.endtime = endtime and o.date = self.date and o.location = self.location)->size() = 0
 
 2)

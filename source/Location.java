@@ -6,7 +6,8 @@ public class Location {
     private int id;
     private String address;
     private City city;
-    //private String organization;
+
+    private String organization;
     public static List<Location> locations = new ArrayList<>();
 
     public Location(int id, String address, String city) {
@@ -42,13 +43,12 @@ public class Location {
         this.city = city;
     }
 
-    /*public String getOrganization() {
+    public String getOrganization() {
         return organization;
     }
-
     public void setOrganization(String organization) {
         this.organization = organization;
-    }*/
+    }
     public static void printAllLocations() {
 
         locations = LocationDAO.getAllLocations();

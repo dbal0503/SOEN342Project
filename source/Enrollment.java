@@ -75,8 +75,7 @@ public class Enrollment {
 
     public static void createBooking(Client client, Offering offering) {
         if (offering.isGroup() && offering.getEnrolled() < offering.getCapacity()) {
-            //enrolledClients.add(client);
-            //enrolled++;
+
             BookingDAO.addBooking(offering.getId(),client.getUniqueId());
 
             offering.setEnrolled(offering.getEnrolled() + 1);
@@ -87,9 +86,7 @@ public class Enrollment {
             BookingDAO.updateOfferingInDatabase(offering);
         }
         else { ///booking is private
-           // enrolledClients.add(client);
-           // enrolled++;
-           // bookings.add(booking);
+
             BookingDAO.addBooking(offering.getId(), client.getUniqueId());
             offering.setAvailable(false);
             offering.setEnrolled(offering.getEnrolled() + 1);

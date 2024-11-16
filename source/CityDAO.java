@@ -6,24 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CityDAO {
-    public int addCity(City city) throws SQLException {
-        String insertSql = "INSERT INTO cities (name) VALUES (?) RETURNING id";
-        try (Connection conn = Database.connecttoDB()) {
-            assert conn != null;
-            PreparedStatement preparedStatement = conn.prepareStatement(insertSql);
-            preparedStatement.setString(1, city.getName());
-
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                } else {
-                    throw new SQLException("Failed to create city, no ID obtained.");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public List<City> getAllCities() throws SQLException {
         String selectStatement = "SELECT * FROM cities";
@@ -41,21 +23,6 @@ public class CityDAO {
         return cities;
     }
 
-    public City getCityById(int id) throws SQLException {
-        String selectStatement = "SELECT * FROM cities WHERE id = ?";
-        try (Connection conn = Database.connecttoDB()) {
-            assert conn != null;
-            PreparedStatement stmt = conn.prepareStatement(selectStatement);
-            stmt.setInt(1, id);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new City(rs.getString("name"));
-                }
-            }
-        }
-        return null;
-    }
 
     public int getCityIdByName(String name) throws SQLException {
         String selectStatement = "SELECT id FROM cities WHERE name = ?";
