@@ -185,18 +185,17 @@ public class Offering {
 
 @Override
 public String toString() {
-    return "Offering{" +
-            "location=" + location +
-            ", startTime='" + startTime + '\'' +
-            ", endTime='" + endTime + '\'' +
-            ", available=" + available +
-            ", isGroup=" + isGroup +
-            ", visible=" + visible +
-            ", capacity=" + capacity +
-            ", enrolled=" + enrolled +
-            ", instructor=" + instructor +
-            ", date='" + date + '\'' +
-            ", offeringName='" + offeringName + '\'' +
-            '}';
+    return "Offering Details:\n" +
+            "Location: " + location + "\n" +
+            "Start Time: " + startTime + "\n" +
+            "End Time: " + endTime + "\n" +
+            "Available: " + available + "\n" +
+            "Group Offering: " + isGroup + "\n" +
+            "Visible: " + visible + "\n" +
+            "Capacity: " + capacity + "\n" +
+            "Enrolled: " + enrolled + "\n" +
+            "Instructor: " + instructor + "\n" +
+            "Date: " + date + "\n" +
+            "Offering Name: " + offeringName;
 }
 }

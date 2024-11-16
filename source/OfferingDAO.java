@@ -238,7 +238,7 @@ public class OfferingDAO {
         String sql = "SELECT * FROM offerings o " +
                 "JOIN locations l ON o.location_id = l.id " +
                 "WHERE o.starttime = ? AND o.endtime = ? " +
-                "AND o.date = ? AND l.address = ?";
+                "AND o.date = ? AND o.location_id = ?";
 
         try (Connection conn = Database.connecttoDB();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -246,7 +246,7 @@ public class OfferingDAO {
             pstmt.setString(1, offering.getStartTime());
             pstmt.setString(2, offering.getEndTime());
             pstmt.setString(3, offering.getDate());
-            pstmt.setString(4, offering.getLocation().getAddress());
+            pstmt.setInt(4, offering.getLocation().getId());
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
