@@ -197,6 +197,32 @@ public class OfferingDAO {
         }
     }
 
+    public static boolean offeringAlreadyExists(Offering offering) {
+        String sql = "SELECT * FROM offerings o " +
+                "JOIN locations l ON o.location_id = l.id " +
+                "WHERE o.starttime = ? AND o.endtime = ? " +
+                "AND o.date = ? AND l.address = ?";
+
+        try (Connection conn = Database.connecttoDB();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, offering.getStartTime());
+            pstmt.setString(2, offering.getEndTime());
+            pstmt.setString(3, offering.getDate());
+            pstmt.setString(4, offering.getLocation().getAddress());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    //already exist
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking for existing offering: " + e.getMessage());
+        }
+        return false; // not exist
+    }
+
 
 
 }

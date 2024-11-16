@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Location {
@@ -5,20 +6,18 @@ public class Location {
     private int id;
     private String address;
     private City city;
-    private String room;
     private String organization;
+    public static List<Location> locations = new ArrayList<>();
 
-    public Location(int id, String address, String city, String organization, String room) {
+    public Location(int id, String address, String city, String organization) {
         this.address = address;
         this.city = new City(city);
         this.organization = organization;
-        this.room = room;
         this.id = id;
     }
     public Location(int id){
         this.id = id;
     }
-
 
     public int getId() {
         return id;
@@ -27,13 +26,7 @@ public class Location {
     public void setId(int id) {
         this.id = id;
     }
-    public String getRoom() {
-        return room;
-    }
 
-    public void setRoom(String room) {
-        this.room = room;
-    }
     public String getAddress() {
         return address;
     }
@@ -58,7 +51,8 @@ public class Location {
         this.organization = organization;
     }
     public static void printAllLocations() {
-        List<Location> locations = LocationDAO.getAllLocations();
+
+        locations = LocationDAO.getAllLocations();
         if (locations.isEmpty()) {
             System.out.println("No locations available.");
             return;
@@ -75,7 +69,6 @@ public class Location {
                 "ID = " + id +
                 ", Address = '" + address + '\'' +
                 ", City = '" + city + '\'' +
-                ", Room = '" + room + '\'' +
                 ", Organization = '" + organization + '\'';
     }
 }

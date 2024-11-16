@@ -18,10 +18,9 @@ public class LocationDAO {
                 int id = rs.getInt("id");
                 String address = rs.getString("address");
                 String cityName = rs.getString("city_name");
-                String room = rs.getString("room");
                 String organization = rs.getString("organization");
 
-                return new Location(id, address, cityName, room, organization);
+                return new Location(id, address, cityName, organization);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching location: " + e.getMessage());
@@ -43,10 +42,9 @@ public class LocationDAO {
                     int id = rs.getInt("id");
                     String address = rs.getString("address");
                     String cityName = rs.getString("city_name");
-                    String room = rs.getString("room");
                     String organization = rs.getString("organization");
 
-                    Location location = new Location(id, address, cityName, room, organization);
+                    Location location = new Location(id, address, cityName, organization);
                     locations.add(location);
                 }
             }

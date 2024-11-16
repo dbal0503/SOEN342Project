@@ -123,7 +123,6 @@ public class BookingDAO {
                     //True = Conflict, False = No Conflict
 
         String offeringQuery = "SELECT starttime, endtime, date FROM offerings WHERE id = ?";
-
         try (Connection conn = Database.connecttoDB();
              PreparedStatement offeringStmt = conn.prepareStatement(offeringQuery)) {
 
@@ -131,32 +130,34 @@ public class BookingDAO {
             ResultSet newOfferingRs = offeringStmt.executeQuery();
 
             if (newOfferingRs.next()) {
-                String newStartTime = newOfferingRs.getString("starttime");
-                String newEndTime = newOfferingRs.getString("endtime");
-                String newDate = newOfferingRs.getString("date");
+                String newStartTime = newOfferingRs.getString("starttime").trim();
+                String newEndTime = newOfferingRs.getString("endtime").trim();
+                String newDate = newOfferingRs.getString("date").trim();
 
                 List<Booking> clientBookings = getBookingsByClient(clientId);
-
                 for (Booking booking : clientBookings) {
-                    offeringStmt.setInt(1, booking.getOfferingId());
-                    try (ResultSet existingOfferingRs = offeringStmt.executeQuery()) {
-                        if (existingOfferingRs.next()) {
-                            String existingStartTime = existingOfferingRs.getString("starttime");
-                            String existingEndTime = existingOfferingRs.getString("endtime");
-                            String existingDate = existingOfferingRs.getString("date");
+                    try (PreparedStatement existingOfferingStmt = conn.prepareStatement(offeringQuery)) {
+                        existingOfferingStmt.setInt(1, booking.getOfferingId());
+                        try (ResultSet existingOfferingRs = existingOfferingStmt.executeQuery()) {
+                            if (existingOfferingRs.next()) {
+                                String existingStartTime = existingOfferingRs.getString("starttime");
+                                String existingEndTime = existingOfferingRs.getString("endtime");
+                                String existingDate = existingOfferingRs.getString("date");
 
-                            // If time and dates are equal = conflict
-                            if (newStartTime.equals(existingStartTime) &&
-                                    newEndTime.equals(existingEndTime) &&
-                                    newDate.equals(existingDate)) {
-                                return true; //True = conflict
+                                // If time and dates are equal = conflict
+                                if (newStartTime.equals(existingStartTime) &&
+                                        newEndTime.equals(existingEndTime) &&
+                                        newDate.equals(existingDate)) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
                             }
                         }
                     }
                 }
             } else {
-                System.out.println("Offering not found.");
-                return true;
+                return false;
             }
         } catch (SQLException e) {
             System.out.println("Error checking booking conflicts: " + e.getMessage());

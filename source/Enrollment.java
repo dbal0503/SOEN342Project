@@ -24,7 +24,10 @@ public class Enrollment {
             System.out.println("This offering is not available for enrollment.");
             return;
         }
-
+        /*if (BookingDAO.hasBookingConflict(client.getUniqueId(), selectedOffering.getId())) {
+            System.out.println("You already have a booking that conflicts with this offering.");
+            return;
+        }*/
         if (client.getAge() < 18) {
             System.out.println("Guardian approval required. Confirm guardian is present to proceed? (yes/no): ");
             String guardianApproval = scanner.nextLine();

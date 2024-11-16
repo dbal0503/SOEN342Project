@@ -90,9 +90,9 @@ public static boolean findAdmin(int id) {
         scanner.nextLine();  // Consume newline
         System.out.println("Enter the offering name: ");
         String offeringName = scanner.nextLine();
-        System.out.println("Enter the start time (YYYY-MM-DD HH:MM:SS): ");
+        System.out.println("Enter the start time in 24-Hour Format (00:00-23:59): ");
         String startTime = scanner.nextLine();
-        System.out.println("Enter the end time (YYYY-MM-DD HH:MM:SS): ");
+        System.out.println("Enter the end time in 24-Hour Format (00:00-23:59): ");
         String endTime = scanner.nextLine();
         System.out.println("Is this a group offering? (true/false): ");
         boolean isGroup = scanner.nextBoolean();
@@ -105,18 +105,22 @@ public static boolean findAdmin(int id) {
         System.out.println("Enter the location ID for this offering: ");
         Location.printAllLocations();
         int locationId = scanner.nextInt();
+        scanner.nextLine();
 
         Location location = LocationDAO.getLocationById(locationId);
 
         if (location != null) {
             Offering newOffering = new Offering(locationId, startTime, endTime, isGroup, capacity, date, offeringName);
-
-            int offeringId = OfferingDAO.addOffering(newOffering);
-
-            if (offeringId != -1) {
-                System.out.println("Offering created successfully with ID: " + offeringId);
+            if (OfferingDAO.offeringAlreadyExists(newOffering)) {
+                System.out.println("Error: An offering is already scheduled at the same time and location.");
             } else {
-                System.out.println("Error creating offering.");
+                int offeringId = OfferingDAO.addOffering(newOffering);
+
+                if (offeringId != -1) {
+                    System.out.println("Offering created successfully with ID: " + offeringId);
+                } else {
+                    System.out.println("Error creating offering.");
+                }
             }
         } else {
             System.out.println("Invalid location ID. Offering creation failed.");
