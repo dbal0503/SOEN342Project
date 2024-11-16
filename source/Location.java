@@ -6,13 +6,12 @@ public class Location {
     private int id;
     private String address;
     private City city;
-    private String organization;
+    //private String organization;
     public static List<Location> locations = new ArrayList<>();
 
-    public Location(int id, String address, String city, String organization) {
+    public Location(int id, String address, String city) {
         this.address = address;
         this.city = new City(city);
-        this.organization = organization;
         this.id = id;
     }
     public Location(int id){
@@ -43,13 +42,13 @@ public class Location {
         this.city = city;
     }
 
-    public String getOrganization() {
+    /*public String getOrganization() {
         return organization;
     }
 
     public void setOrganization(String organization) {
         this.organization = organization;
-    }
+    }*/
     public static void printAllLocations() {
 
         locations = LocationDAO.getAllLocations();
@@ -69,6 +68,6 @@ public class Location {
                 "ID = " + id +
                 ", Address = '" + address + '\'' +
                 ", City = '" + city + '\'' +
-                ", Organization = '" + organization + '\'';
+                '\'';
     }
 }

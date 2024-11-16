@@ -37,7 +37,6 @@ public class Database{
                         "name TEXT NOT NULL," +
                         "city_id INT NOT NULL," +
                         "address TEXT NOT NULL," +
-                        "organization TEXT NOT NULL," +
                         "FOREIGN KEY (city_id) REFERENCES cities(id))";
                 stmt.executeUpdate(createLocationsTable);
 
