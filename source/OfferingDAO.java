@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class OfferingDAO {
 
@@ -131,7 +132,7 @@ public class OfferingDAO {
     private static Offering extractOffering(ResultSet rs) throws SQLException {
         Offering offering = new Offering();
         offering.setId(rs.getInt("id"));
-        offering.setLocation(new Location(LocationDAO.getLocationById(rs.getInt("location_id"))));
+        offering.setLocation(new Location(Objects.requireNonNull(LocationDAO.getLocationById(rs.getInt("location_id")))));
         offering.setStartTime(rs.getString("starttime"));
         offering.setEndTime(rs.getString("endtime"));
         offering.setAvailable(rs.getBoolean("available"));
